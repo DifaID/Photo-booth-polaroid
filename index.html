@@ -758,6 +758,13 @@ Array.from(
   })
 );
 
+const namaFrame = [
+  "Satu momen, satu kenangan",
+  "Dua momen, jadi satu cerita",
+  "Tiga momen, makin lengkap ceritanya",
+  "Empat momen, penuh warna dan kenangan",
+  "Lima momen, satu album kenangan"
+];
 
 /* =========================================================
    CAMERA
@@ -947,7 +954,7 @@ function render(){
         document.createElement("h3");
 
       title.textContent=
-        `FRAME ${i+1} • ${f.layout} FOTO`;
+  namaFrame[i];
 
       frame.appendChild(title);
 
@@ -1566,10 +1573,10 @@ async function buatGambarPolaroid(){
       "bold 18px Arial";
 
     ctx.fillText(
-      `FRAME ${originalIndex+1} • ${f.layout} FOTO`,
-      width/2,
-      y+24
-    );
+  namaFrame[originalIndex],
+  width/2,
+  y+24
+);
 
     const imageY=y+34;
 
