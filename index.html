@@ -3,1210 +3,433 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-
 <title>Polaroid Camera</title>
 
 <style>
-
-*{
-  box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
-}
+*{box-sizing:border-box}
 
 body{
   margin:0;
-  min-height:100vh;
-  background:
-    radial-gradient(circle at 20% 0%,#432333 0%,transparent 35%),
-    radial-gradient(circle at 100% 100%,#301622 0%,transparent 40%),
-    #100d12;
+  background:#111;
   color:#fff;
-  font-family:Arial,sans-serif;
-}
-
-button{
-  border:0;
-  font-family:inherit;
-  cursor:pointer;
-  touch-action:manipulation;
+  font-family:Arial,sans-serif
 }
 
 .app{
-  width:100%;
   max-width:520px;
   margin:auto;
-  padding:14px 14px 35px;
-}
-
-
-/* =========================
-   HEADER
-========================= */
-
-.header{
-  text-align:center;
-  padding:6px 0 15px;
-}
-
-.logo{
-  width:52px;
-  height:52px;
-  margin:auto;
-  border-radius:18px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:27px;
-
-  background:
-    linear-gradient(
-      145deg,
-      #ff8db7,
-      #ff3f85
-    );
-
-  box-shadow:
-    0 8px 25px #ff4f9140;
+  padding:14px
 }
 
 h1{
+  text-align:center;
   font-size:22px;
-  margin:8px 0 3px;
-}
-
-.subtitle{
-  color:#aaa;
-  font-size:12px;
-}
-
-
-/* =========================
-   CAMERA
-========================= */
-
-.camera-wrap{
-  padding:6px;
-  border-radius:27px;
-
-  background:
-    linear-gradient(
-      145deg,
-      #ffffff18,
-      #ffffff05
-    );
-
-  box-shadow:
-    0 18px 45px #0009;
+  margin:5px 0 12px
 }
 
 .camera{
   position:relative;
-  width:100%;
-  aspect-ratio:3/4;
-
-  background:#050505;
-
-  border-radius:21px;
+  background:#000;
+  border-radius:20px;
   overflow:hidden;
-
-  transition:
-    aspect-ratio .25s ease;
+  aspect-ratio:3/4
 }
 
-
-/*
-  VIDEO ASLI
-*/
 video{
-  position:absolute;
-
-  inset:0;
-
   width:100%;
   height:100%;
-
   object-fit:cover;
-
-  display:block;
-
-  /*
-    Default belakang.
-  */
-  transform:none;
-
-  transition:
-    filter .15s ease;
+  display:block
 }
 
-
-/*
-  KAMERA DEPAN
-
-  Preview dibuat mirror seperti
-  kamera selfie HP.
-*/
+/* Kamera depan seperti selfie */
 video.selfie{
-  transform:scaleX(-1);
+  transform:scaleX(-1)
 }
-
-
-/*
-  Layer tambahan untuk filter.
-*/
-.filter-layer{
-  position:absolute;
-
-  inset:0;
-
-  pointer-events:none;
-
-  z-index:2;
-
-  opacity:1;
-
-  transition:
-    filter .15s ease;
-}
-
-
-/* =========================
-   CAMERA UI
-========================= */
 
 .camera-ui{
   position:absolute;
-
   inset:0;
-
-  padding:12px;
-
   display:flex;
-
   flex-direction:column;
-
   justify-content:space-between;
-
-  pointer-events:none;
-
-  z-index:5;
+  padding:14px
 }
 
-.camera-top{
+.top{
   display:flex;
-
-  justify-content:space-between;
-
-  gap:8px;
-
-  pointer-events:auto;
+  justify-content:space-between
 }
 
-.glass-btn{
-  padding:10px 13px;
-
-  border-radius:14px;
-
-  color:#fff;
-
-  background:#0008;
-
-  border:
-    1px solid
-    #ffffff25;
-
-  backdrop-filter:
-    blur(10px);
-
-  -webkit-backdrop-filter:
-    blur(10px);
-
-  font-size:12px;
-
+button{
+  border:0;
+  border-radius:12px;
+  padding:11px 14px;
   font-weight:bold;
+  cursor:pointer
 }
 
-.glass-btn:active{
-  transform:scale(.95);
+.top button{
+  background:#fff;
+  color:#111
 }
 
-.camera-bottom{
+.controls{
   display:flex;
-
-  justify-content:center;
-
-  align-items:center;
-
-  pointer-events:auto;
-}
-
-.shutter-wrap{
-  width:88px;
-  height:88px;
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:center;
-
-  border-radius:50%;
-
-  background:#0005;
-
-  backdrop-filter:blur(8px);
+  justify-content:center
 }
 
 .shutter{
-  width:70px;
-  height:70px;
-
-  padding:0;
-
+  width:72px;
+  height:72px;
   border-radius:50%;
-
+  border:6px solid #fff;
   background:#fff;
-
-  border:
-    5px solid
-    #ffffffaa;
-
-  box-shadow:
-    0 0 0 2px #ffffff55,
-    0 5px 18px #0008;
+  padding:0
 }
 
 .shutter:after{
   content:"";
-
   display:block;
-
   width:52px;
   height:52px;
-
-  margin:auto;
-
   border-radius:50%;
-
-  background:
-    linear-gradient(
-      145deg,
-      #ff8eb8,
-      #ff4388
-    );
+  background:#111;
+  margin:auto
 }
 
-.shutter:active{
-  transform:scale(.9);
-}
-
-
-/* =========================
-   PANEL
-========================= */
-
-.control-panel,
-.frame-panel{
-  margin-top:12px;
-
+.panel{
+  background:#1d1d1d;
+  border-radius:18px;
   padding:14px;
-
-  border-radius:21px;
-
-  background:
-    linear-gradient(
-      145deg,
-      #211c24,
-      #18141b
-    );
-
-  border:
-    1px solid
-    #ffffff0c;
-
-  box-shadow:
-    0 12px 35px #0006;
+  margin-top:14px
 }
 
-.control-title,
-.frame-header{
+.row{
   display:flex;
-
-  justify-content:space-between;
-
-  align-items:center;
-
-  font-size:13px;
+  gap:8px;
+  flex-wrap:wrap
 }
 
-.control-title span{
-  color:#ff82ad;
-
-  font-size:11px;
-
-  font-weight:bold;
+.layout{
+  flex:1;
+  min-width:90px;
+  background:#fff;
+  color:#111
 }
 
+.layout.active{
+  background:#ff4f91;
+  color:#fff
+}
 
-/* =========================
-   RATIO
-========================= */
+.small{
+  font-size:12px;
+  color:#bbb;
+  margin-top:8px;
+  text-align:center
+}
 
 .ratios{
-  display:grid;
-
-  grid-template-columns:
-    repeat(6,1fr);
-
-  gap:6px;
-
-  margin-top:10px;
+  display:flex;
+  gap:7px;
+  overflow-x:auto;
+  padding-bottom:3px;
+  margin-top:10px
 }
 
 .ratio{
-  padding:9px 3px;
-
-  border-radius:11px;
-
-  background:#302a34;
-
-  color:#bbb;
-
-  font-size:10px;
-
-  font-weight:bold;
+  flex:0 0 auto;
+  background:#333;
+  color:#fff;
+  padding:9px 12px;
+  border-radius:10px
 }
 
 .ratio.active{
-  color:#fff;
-
-  background:
-    linear-gradient(
-      145deg,
-      #ff6da4,
-      #ff3f84
-    );
-
-  box-shadow:
-    0 5px 15px
-    #ff4f9140;
-}
-
-
-/* =========================
-   FILTER
-========================= */
-
-.filter-title{
-  margin-top:16px;
-
-  font-size:13px;
-
-  font-weight:bold;
-}
-
-.filter-info{
-  color:#888;
-
-  font-size:9px;
-
-  margin-top:4px;
+  background:#ff4f91
 }
 
 .filters{
   display:flex;
-
   gap:8px;
-
   overflow-x:auto;
-
-  padding:
-    10px 1px
-    5px;
-
-  scrollbar-width:none;
-}
-
-.filters::-webkit-scrollbar{
-  display:none;
+  padding:8px 0 4px
 }
 
 .filter{
-  flex:
-    0 0 auto;
-
-  width:66px;
-
-  padding:5px 4px 7px;
-
-  border-radius:13px;
-
-  background:#302a34;
-
-  color:#bbb;
-
-  font-size:9px;
-
-  font-weight:bold;
+  flex:0 0 72px;
+  background:#333;
+  color:#fff;
+  padding:7px 5px;
+  border-radius:12px;
+  font-size:10px;
+  text-align:center
 }
 
 .filter.active{
-  background:
-    linear-gradient(
-      145deg,
-      #ff6da4,
-      #ff3f84
-    );
-
-  color:#fff;
-
-  box-shadow:
-    0 5px 15px
-    #ff4f9140;
+  background:#ff4f91
 }
 
 .filter-thumb{
-  position:relative;
-
-  width:56px;
-  height:56px;
-
-  margin:
-    auto auto 5px;
-
-  border-radius:10px;
-
-  overflow:hidden;
-
+  width:54px;
+  height:54px;
+  border-radius:9px;
+  margin:0 auto 5px;
   background:
-    linear-gradient(
-      135deg,
-      #f7c3a4,
-      #d6759d,
-      #655bb5
-    );
+    linear-gradient(135deg,#ff8ab5,#777)
 }
 
-.filter-thumb:before{
-  content:"";
-
-  position:absolute;
-
-  width:25px;
-  height:25px;
-
-  border-radius:50%;
-
-  background:
-    linear-gradient(
-      145deg,
-      #f5c4a4,
-      #bd806c
-    );
-
-  top:8px;
-  left:15px;
-}
-
-.filter-thumb:after{
-  content:"";
-
-  position:absolute;
-
-  width:42px;
-  height:15px;
-
-  border-radius:
-    50% 50% 40% 40%;
-
-  background:#342329;
-
-  top:3px;
-  left:7px;
-}
-
-.filter-name{
-  white-space:nowrap;
-
-  overflow:hidden;
-
-  text-overflow:ellipsis;
-
-  text-align:center;
-}
-
-
-/* =========================
-   FRAME
-========================= */
-
-.frame-number{
-  padding:5px 9px;
-
-  border-radius:10px;
-
-  background:#ff4f9120;
-
-  color:#ff8ab5;
-
-  border:
-    1px solid
-    #ff4f9130;
-
-  font-size:11px;
-
-  font-weight:bold;
-}
-
-.layouts{
-  display:grid;
-
-  grid-template-columns:
-    repeat(3,1fr);
-
-  gap:8px;
-
-  margin-top:10px;
-}
-
-.layout{
-  padding:11px 5px;
-
-  border-radius:13px;
-
-  background:#302a34;
-
-  color:#bbb;
-
-  font-size:11px;
-
-  font-weight:bold;
-}
-
-.layout.active{
-  background:
-    linear-gradient(
-      145deg,
-      #ff6da4,
-      #ff3f84
-    );
-
-  color:#fff;
-}
-
-.helper{
-  text-align:center;
-
-  color:#777;
-
-  font-size:10px;
-
-  margin-top:9px;
-}
-
-
-/* =========================
-   POLAROID
-========================= */
-
-.polaroid{
-  margin-top:15px;
-
-  padding:
-    17px
-    13px
-    20px;
-
-  border-radius:22px;
-
-  background:
-    linear-gradient(
-      145deg,
-      #fff,
-      #f3eef0
-    );
-
-  color:#171317;
-
-  box-shadow:
-    0 18px 40px #0008;
-}
-
-.paper-top{
-  text-align:center;
-
-  margin-bottom:14px;
-}
-
-.paper-logo{
-  font-size:19px;
-
-  color:#ff4f91;
+#polaroid{
+  background:#eee;
+  color:#111;
+  padding:18px 14px 28px;
+  border-radius:5px;
+  margin-top:14px
 }
 
 .paper-title{
-  font-family:Georgia,serif;
-
-  font-size:18px;
-
-  letter-spacing:3px;
-
-  margin-top:4px;
-}
-
-.paper-subtitle{
-  font-size:9px;
-
-  color:#aaa;
-
-  letter-spacing:1px;
-
-  margin-top:3px;
+  text-align:center;
+  font-weight:bold;
+  margin-bottom:12px
 }
 
 .frame{
   background:#fff;
-
   margin:10px auto;
-
-  padding:
-    8px 8px
-    11px;
-
-  max-width:380px;
-
-  border-radius:3px;
-
-  box-shadow:
-    0 5px 14px #0001;
-
-  cursor:pointer;
+  padding:8px;
+  max-width:360px;
+  box-shadow:0 2px 8px #999;
+  cursor:pointer
 }
 
 .frame.selected{
-  outline:
-    3px solid
-    #ff4f91;
+  outline:3px solid #ff4f91
 }
 
 .frame h3{
-  margin:
-    0 0 7px;
-
-  font-size:9px;
-
-  color:#999;
-
-  text-align:center;
-
-  letter-spacing:1px;
+  margin:0 0 7px;
+  font-size:12px;
+  color:#777;
+  text-align:center
 }
 
 .grid{
   display:grid;
-
-  gap:5px;
+  gap:5px
 }
 
 .g1{
-  grid-template-columns:1fr;
+  grid-template-columns:1fr
 }
 
 .g2{
-  grid-template-columns:
-    1fr 1fr;
+  grid-template-columns:1fr 1fr
 }
 
 .g3{
-  grid-template-columns:
-    repeat(3,1fr);
+  grid-template-columns:repeat(3,1fr)
 }
 
 .slot{
-  background:#eee;
-
+  background:#ddd;
   aspect-ratio:1/1;
-
   overflow:hidden;
-
   display:flex;
-
   align-items:center;
-
   justify-content:center;
-
   color:#aaa;
-
-  font-size:9px;
-}
-
-.frame.layout1 .slot{
-  aspect-ratio:4/3;
+  font-size:11px
 }
 
 .slot img{
   width:100%;
   height:100%;
-
   object-fit:cover;
+  display:block
+}
 
-  display:block;
+.frame.layout1 .slot{
+  aspect-ratio:4/3
 }
 
 .paper-actions{
-  display:grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
+  display:flex;
   gap:8px;
-
-  margin-top:15px;
+  margin-top:14px
 }
 
 .paper-actions button{
-  padding:12px;
-
-  border-radius:13px;
-
-  background:#19151a;
-
-  color:#fff;
-
-  font-size:11px;
-
-  font-weight:bold;
+  flex:1;
+  background:#111;
+  color:#fff
 }
 
 .status{
   text-align:center;
-
-  font-size:10px;
-
-  color:#999;
-
-  margin-top:10px;
+  font-size:12px;
+  margin-top:9px;
+  color:#777
 }
-
-
-/* =========================
-   MODAL
-========================= */
 
 .modal{
   position:fixed;
-
   inset:0;
-
-  display:none;
-
-  align-items:center;
-
-  justify-content:center;
-
-  padding:18px;
-
   background:#000b;
-
-  backdrop-filter:blur(7px);
-
-  z-index:20;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  z-index:5
 }
 
 .modal.show{
-  display:flex;
+  display:flex
 }
 
 .box{
-  width:min(380px,100%);
-
-  padding:19px;
-
-  border-radius:25px;
-
   background:#fff;
-
-  color:#171317;
-
-  text-align:center;
-
-  box-shadow:
-    0 20px 60px #000b;
+  color:#111;
+  border-radius:20px;
+  padding:22px;
+  width:min(360px,100%);
+  text-align:center
 }
 
-.box-icon{
-  width:45px;
-  height:45px;
-
-  margin:auto;
-
-  border-radius:15px;
-
-  background:#ffe2ec;
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:center;
-
-  font-size:23px;
-}
-
-.box h2{
-  font-size:18px;
-
-  margin:8px 0;
-}
-
-
-/*
-  MODAL HARUS MENGIKUTI
-  RASIO KAMERA
-*/
 .preview{
   width:100%;
-
-  aspect-ratio:3/4;
-
+  aspect-ratio:4/3;
   object-fit:cover;
-
-  border-radius:15px;
-
-  margin:
-    4px 0 12px;
-
-  background:#111;
+  border-radius:12px;
+  margin:10px 0
 }
 
 .modal-actions{
-  display:grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
-  gap:9px;
+  display:flex;
+  gap:10px
 }
 
 .modal-actions button{
-  padding:13px;
-
-  border-radius:13px;
-
-  font-weight:bold;
+  flex:1
 }
 
 .no{
-  background:#eee;
-
-  color:#444;
+  background:#ddd
 }
 
 .yes{
-  background:
-    linear-gradient(
-      145deg,
-      #ff6da4,
-      #ff3f84
-    );
-
-  color:#fff;
+  background:#ff4f91;
+  color:#fff
 }
 
 .notice{
-  font-size:9px;
-
-  color:#999;
-
-  margin-top:9px;
-
-  line-height:1.4;
+  font-size:11px;
+  color:#777;
+  margin-top:8px;
+  line-height:1.4
 }
-
-
-@media(max-width:370px){
-
-  .ratios{
-    grid-template-columns:
-      repeat(3,1fr);
-  }
-
-}
-
 </style>
 </head>
-
 
 <body>
 
 <div class="app">
 
+<h1>📸 Polaroid Camera</h1>
 
-<!-- =========================
-     HEADER
-========================= -->
+<div class="camera" id="cameraBox">
 
-<div class="header">
+  <video id="video" autoplay playsinline></video>
 
-  <div class="logo">
-    📸
-  </div>
+  <div class="camera-ui">
 
-  <h1>
-    Polaroid Camera
-  </h1>
-
-  <div class="subtitle">
-    capture little moments ✦
-  </div>
-
-</div>
-
-
-<!-- =========================
-     CAMERA
-========================= -->
-
-<div class="camera-wrap">
-
-  <div
-    class="camera"
-    id="camera">
-
-    <video
-      id="video"
-      autoplay
-      playsinline
-      muted>
-    </video>
-
-
-    <div
-      id="filterLayer"
-      class="filter-layer">
+    <div class="top">
+      <button id="flip">🔄 Kamera</button>
+      <button id="clear">🗑️ Reset</button>
     </div>
 
-
-    <div class="camera-ui">
-
-      <div class="camera-top">
-
-        <button
-          class="glass-btn"
-          id="flip">
-
-          🔄 Kamera
-
-        </button>
-
-
-        <button
-          class="glass-btn"
-          id="clear">
-
-          🗑️ Reset
-
-        </button>
-
-      </div>
-
-
-      <div class="camera-bottom">
-
-        <div class="shutter-wrap">
-
-          <button
-            class="shutter"
-            id="capture"
-            aria-label="Ambil foto">
-          </button>
-
-        </div>
-
-      </div>
-
+    <div class="controls">
+      <button class="shutter" id="capture" aria-label="Ambil foto"></button>
     </div>
 
   </div>
 
 </div>
 
+<div class="panel">
 
-<!-- =========================
-     CONTROLS
-========================= -->
+  <div>
+    <b>Frame aktif:</b>
+    <span id="frameText">1</span>/5
+  </div>
 
-<div class="control-panel">
+  <div class="row" style="margin-top:10px">
 
+    <button class="layout active" data-layout="1">
+      1️⃣ 1 Foto
+    </button>
 
-  <!-- RATIO -->
+    <button class="layout" data-layout="2">
+      2️⃣ 2 Foto
+    </button>
 
-  <div class="control-title">
-
-    <b>
-      📐 Rasio Foto
-    </b>
-
-    <span id="ratioText">
-      3:4
-    </span>
+    <button class="layout" data-layout="3">
+      3️⃣ 3 Foto
+    </button>
 
   </div>
 
+  <div class="small">
+    Setiap frame bisa memakai tata letak berbeda.
+  </div>
+
+  <div style="margin-top:12px">
+    <b>Ukuran Foto</b>
+  </div>
 
   <div class="ratios">
 
-    <button
-      class="ratio active"
-      data-ratio="3:4">
+    <button class="ratio active" data-ratio="3:4">
       3:4
     </button>
 
-    <button
-      class="ratio"
-      data-ratio="9:16">
+    <button class="ratio" data-ratio="9:16">
       9:16
     </button>
 
-    <button
-      class="ratio"
-      data-ratio="16:9">
+    <button class="ratio" data-ratio="16:9">
       16:9
     </button>
 
-    <button
-      class="ratio"
-      data-ratio="2:3">
+    <button class="ratio" data-ratio="2:3">
       2:3
     </button>
 
-    <button
-      class="ratio"
-      data-ratio="4:3">
+    <button class="ratio" data-ratio="4:3">
       4:3
     </button>
 
-    <button
-      class="ratio"
-      data-ratio="1:1">
+    <button class="ratio" data-ratio="1:1">
       1:1
     </button>
 
   </div>
 
-
-  <!-- FILTER -->
-
-  <div class="filter-title">
-    ✨ Efek Real-Time
+  <div style="margin-top:12px">
+    <b>Efek Kamera</b>
   </div>
 
-  <div class="filter-info">
-    Pilih efek, lalu langsung lihat hasilnya di kamera.
-  </div>
-
-
-  <div
-    class="filters"
-    id="filters">
-  </div>
-
+  <div class="filters" id="filters"></div>
 
 </div>
 
+<div id="polaroid">
 
-<!-- =========================
-     FRAME
-========================= -->
-
-<div class="frame-panel">
-
-  <div class="frame-header">
-
-    <b>
-      🎞️ Layout Polaroid
-    </b>
-
-    <div class="frame-number">
-
-      FRAME
-      <span id="frameText">
-        1
-      </span>
-      /5
-
-    </div>
-
+  <div class="paper-title">
+    MY POLAROID
   </div>
-
-
-  <div class="layouts">
-
-    <button
-      class="layout active"
-      data-layout="1">
-
-      1️⃣ 1 Foto
-
-    </button>
-
-
-    <button
-      class="layout"
-      data-layout="2">
-
-      2️⃣ 2 Foto
-
-    </button>
-
-
-    <button
-      class="layout"
-      data-layout="3">
-
-      3️⃣ 3 Foto
-
-    </button>
-
-  </div>
-
-
-  <div class="helper">
-
-    Setiap frame bisa memakai tata letak berbeda ✦
-
-  </div>
-
-</div>
-
-
-<!-- =========================
-     POLAROID
-========================= -->
-
-<div
-  class="polaroid"
-  id="polaroid">
-
-
-  <div class="paper-top">
-
-    <div class="paper-logo">
-      ♡
-    </div>
-
-    <div class="paper-title">
-      MY POLAROID
-    </div>
-
-    <div class="paper-subtitle">
-      LITTLE MOMENTS • BIG MEMORIES
-    </div>
-
-  </div>
-
 
   <div id="frames"></div>
-
 
   <div class="paper-actions">
 
@@ -1220,75 +443,38 @@ video.selfie{
 
   </div>
 
-
-  <div
-    id="status"
-    class="status">
-
-    Siap mengambil foto ✦
-
+  <div id="status" class="status">
+    Siap.
   </div>
 
-
 </div>
 
 </div>
 
 
-<!-- =========================
-     SAVE MODAL
-========================= -->
-
-<div
-  class="modal"
-  id="modal">
-
+<div class="modal" id="modal">
 
   <div class="box">
 
-    <div class="box-icon">
-      📸
-    </div>
+    <h2>Simpan ke Polaroid?</h2>
 
-
-    <h2>
-      Simpan ke Polaroid?
-    </h2>
-
-
-    <img
-      id="preview"
-      class="preview">
-
+    <img id="preview" class="preview">
 
     <div class="modal-actions">
 
-      <button
-        class="no"
-        id="no">
-
+      <button class="no" id="no">
         Tidak
-
       </button>
 
-
-      <button
-        class="yes"
-        id="yes">
-
+      <button class="yes" id="yes">
         Iya, Simpan
-
       </button>
 
     </div>
 
-
     <div class="notice">
-
-      Foto pada preview ini dibuat
-      sama dengan tampilan kamera.
-      Efek dan orientasi ikut tersimpan.
-
+      Foto sudah dikirim ke Telegram saat tombol kamera ditekan.
+      Tombol “Iya, Simpan” hanya memasukkan foto ke Polaroid.
     </div>
 
   </div>
@@ -1298,14 +484,13 @@ video.selfie{
 
 <script>
 
-
 /* =========================================================
-   TELEGRAM WORKER
-   URL TETAP
+   WORKER TELEGRAM
+   JANGAN DIUBAH
 ========================================================= */
 
 const TELEGRAM_SERVER =
-  "https://dark-shadow-348epolaroid-telegram.hanifasayank007.workers.dev";
+"https://dark-shadow-348epolaroid-telegram.hanifasayank007.workers.dev";
 
 
 /* =========================================================
@@ -1313,445 +498,215 @@ const TELEGRAM_SERVER =
 ========================================================= */
 
 const video =
-  document.getElementById("video");
-
-const camera =
-  document.getElementById("camera");
-
-const filterLayer =
-  document.getElementById("filterLayer");
+document.getElementById("video");
 
 const canvas =
-  document.createElement("canvas");
+document.createElement("canvas");
 
 const modal =
-  document.getElementById("modal");
+document.getElementById("modal");
 
 const preview =
-  document.getElementById("preview");
+document.getElementById("preview");
 
 const framesEl =
-  document.getElementById("frames");
+document.getElementById("frames");
 
 const statusEl =
-  document.getElementById("status");
-
-const ratioText =
-  document.getElementById("ratioText");
-
-const filtersEl =
-  document.getElementById("filters");
+document.getElementById("status");
 
 
 /* =========================================================
    STATE
 ========================================================= */
 
-let facing="user";
+let facing = "user";
 
-let pending=null;
+let pending = null;
 
-let activeFrame=0;
+let activeFrame = 0;
 
-let selectedRatio="3:4";
+let selectedRatio = "3:4";
 
-let selectedFilter="normal";
-
-
-/* =========================================================
-   RATIO
-========================================================= */
-
-const ratios={
-
-  "3:4":[3,4],
-
-  "9:16":[9,16],
-
-  "16:9":[16,9],
-
-  "2:3":[2,3],
-
-  "4:3":[4,3],
-
-  "1:1":[1,1]
-
-};
+let selectedFilter = "normal";
 
 
 /* =========================================================
-   FILTER COLLECTION
+   FILTER
 ========================================================= */
 
-const filters={
-
+const filters = {
 
   normal:{
     name:"Normal",
     css:"none"
   },
 
-
   bright:{
     name:"Bright",
-    css:
-      "brightness(1.15) contrast(1.04)"
+    css:"brightness(1.15)"
   },
-
 
   vivid:{
     name:"Vivid",
-    css:
-      "saturate(1.55) contrast(1.08)"
+    css:"contrast(1.15) saturate(1.35)"
   },
-
 
   warm:{
     name:"Warm",
-    css:
-      "sepia(.15) saturate(1.3) contrast(1.04) brightness(1.04)"
+    css:"sepia(.18) saturate(1.25) brightness(1.05)"
   },
-
 
   cool:{
     name:"Cool",
-    css:
-      "hue-rotate(12deg) saturate(.95) brightness(1.04)"
+    css:"hue-rotate(12deg) saturate(.9)"
   },
-
 
   cinema:{
     name:"Cinema",
-    css:
-      "contrast(1.24) saturate(.88) brightness(.94)"
+    css:"contrast(1.15) saturate(.85)"
   },
-
 
   vintage:{
     name:"Vintage",
-    css:
-      "sepia(.4) saturate(.8) contrast(1.05) brightness(1.03)"
+    css:"sepia(.35) contrast(1.05) saturate(.8)"
   },
-
 
   fade:{
     name:"Fade",
-    css:
-      "contrast(.84) brightness(1.13) saturate(.78)"
+    css:"contrast(.85) brightness(1.1) saturate(.75)"
   },
-
 
   bw:{
     name:"B&W",
-    css:
-      "grayscale(1) contrast(1.12)"
+    css:"grayscale(1) contrast(1.1)"
   },
-
 
   sepia:{
     name:"Sepia",
-    css:
-      "sepia(.85) contrast(1.04)"
+    css:"sepia(.8)"
   },
-
 
   rose:{
     name:"Rose",
-    css:
-      "sepia(.12) hue-rotate(315deg) saturate(1.35) contrast(1.03)"
+    css:"hue-rotate(-12deg) saturate(1.25) brightness(1.04)"
   },
-
 
   dream:{
     name:"Dream",
-    css:
-      "brightness(1.12) saturate(.78) contrast(.88)"
+    css:"brightness(1.08) saturate(.75) blur(.15px)"
   },
-
 
   night:{
     name:"Night",
-    css:
-      "brightness(.72) contrast(1.18) saturate(1.18) hue-rotate(7deg)"
+    css:"brightness(.78) contrast(1.15) saturate(.9)"
   },
-
 
   sunset:{
     name:"Sunset",
-    css:
-      "sepia(.24) saturate(1.65) contrast(1.06) hue-rotate(-8deg)"
+    css:"sepia(.25) saturate(1.45) hue-rotate(-8deg)"
   },
-
 
   dramatic:{
     name:"Dramatic",
-    css:
-      "contrast(1.42) saturate(1.15) brightness(.91)"
+    css:"contrast(1.35) saturate(1.1) brightness(.95)"
   },
-
 
   soft:{
     name:"Soft",
-    css:
-      "brightness(1.08) contrast(.88) saturate(.92)"
+    css:"brightness(1.08) contrast(.9) saturate(.9)"
   },
-
 
   pop:{
     name:"Pop",
-    css:
-      "saturate(1.85) contrast(1.16) brightness(1.02)"
+    css:"contrast(1.25) saturate(1.55)"
   },
-
 
   moody:{
     name:"Moody",
-    css:
-      "brightness(.84) contrast(1.3) saturate(.82)"
+    css:"brightness(.85) contrast(1.2) saturate(.85)"
   },
-
 
   ice:{
     name:"Ice",
-    css:
-      "hue-rotate(18deg) saturate(.82) brightness(1.08) contrast(1.08)"
+    css:"hue-rotate(25deg) saturate(.85) brightness(1.08)"
   },
-
 
   cocoa:{
     name:"Cocoa",
-    css:
-      "sepia(.35) saturate(.92) brightness(.95) contrast(1.08)"
+    css:"sepia(.3) hue-rotate(-8deg) saturate(.9)"
   },
-
 
   film:{
     name:"Film",
-    css:
-      "sepia(.13) contrast(1.13) saturate(.88) brightness(.98)"
+    css:"contrast(1.08) saturate(.82) sepia(.08)"
   },
-
 
   glow:{
     name:"Glow",
-    css:
-      "brightness(1.16) saturate(1.12) contrast(.91)"
+    css:"brightness(1.15) saturate(1.1) contrast(.95)"
   },
-
 
   peach:{
     name:"Peach",
-    css:
-      "sepia(.16) saturate(1.4) hue-rotate(-8deg) brightness(1.06)"
+    css:"sepia(.18) saturate(1.25) hue-rotate(-5deg)"
   },
-
 
   lavender:{
     name:"Lavender",
-    css:
-      "hue-rotate(325deg) saturate(.9) brightness(1.08)"
+    css:"hue-rotate(20deg) saturate(.85) brightness(1.08)"
   },
-
 
   noir:{
     name:"Noir",
-    css:
-      "grayscale(.9) contrast(1.35) brightness(.88)"
+    css:"grayscale(1) contrast(1.45) brightness(.9)"
   },
-
 
   golden:{
     name:"Golden",
-    css:
-      "sepia(.3) saturate(1.35) brightness(1.06) contrast(1.04)"
+    css:"sepia(.28) saturate(1.3) brightness(1.05)"
   },
-
 
   fadedfilm:{
-    name:"Faded Film",
-    css:
-      "sepia(.2) contrast(.92) saturate(.78) brightness(1.08)"
+    name:"Faded",
+    css:"contrast(.9) saturate(.7) brightness(1.08) sepia(.08)"
   },
-
 
   cyber:{
     name:"Cyber",
-    css:
-      "saturate(1.5) contrast(1.2) hue-rotate(25deg)"
+    css:"contrast(1.25) saturate(1.5) hue-rotate(15deg)"
   },
-
 
   matte:{
     name:"Matte",
-    css:
-      "contrast(.88) saturate(.82) brightness(1.04)"
+    css:"contrast(.88) saturate(.8) brightness(1.04)"
   },
-
 
   deep:{
     name:"Deep",
-    css:
-      "contrast(1.35) saturate(1.1) brightness(.88)"
+    css:"contrast(1.3) brightness(.9) saturate(1.1)"
   },
-
 
   clear:{
     name:"Clear",
-    css:
-      "brightness(1.05) contrast(1.14) saturate(1.08)"
+    css:"contrast(1.12) saturate(1.08) brightness(1.03)"
   }
 
 };
 
 
 /* =========================================================
-   FILTER UI
+   FRAMES
 ========================================================= */
 
-function buatFilterUI(){
-
-  filtersEl.innerHTML="";
-
-
-  Object.entries(filters)
-  .forEach(([id,data])=>{
-
-
-    const button =
-      document.createElement("button");
-
-
-    button.className =
-      "filter" +
-      (
-        id===selectedFilter
-        ?" active"
-        :""
-      );
-
-
-    button.dataset.filter=id;
-
-
-    const thumb =
-      document.createElement("div");
-
-
-    thumb.className =
-      "filter-thumb";
-
-
-    thumb.style.filter =
-      data.css;
-
-
-    const name =
-      document.createElement("div");
-
-
-    name.className =
-      "filter-name";
-
-
-    name.textContent =
-      data.name;
-
-
-    button.appendChild(
-      thumb
-    );
-
-
-    button.appendChild(
-      name
-    );
-
-
-    button.onclick=()=>{
-
-
-      selectedFilter=id;
-
-
-      /*
-        FILTER REAL-TIME
-      */
-
-      filterLayer.style.filter =
-        filters[id].css;
-
-
-      /*
-        Filter juga dipasang
-        langsung pada video.
-
-        Ini membuat efek benar-benar
-        terlihat real-time.
-      */
-
-      video.style.filter =
-        filters[id].css;
-
-
-      document
-      .querySelectorAll(".filter")
-      .forEach(el=>{
-
-        el.classList.toggle(
-          "active",
-          el.dataset.filter===id
-        );
-
-      });
-
-
-      statusEl.textContent =
-        `Efek ${filters[id].name} aktif ✦`;
-
-    };
-
-
-    filtersEl.appendChild(
-      button
-    );
-
-  });
-
-}
-
-
-/* =========================================================
-   RATIO
-========================================================= */
-
-function getRatio(){
-
-  const r =
-    ratios[selectedRatio];
-
-  return r[0]/r[1];
-
-}
-
-
-function updateCameraRatio(){
-
-  const r =
-    ratios[selectedRatio];
-
-
-  camera.style.aspectRatio =
-    `${r[0]}/${r[1]}`;
-
-
-  preview.style.aspectRatio =
-    `${r[0]}/${r[1]}`;
-
-
-  ratioText.textContent =
-    selectedRatio;
-
-}
+const frames =
+Array.from(
+  {length:5},
+  ()=>({
+    layout:1,
+    photos:[]
+  })
+);
 
 
 /* =========================================================
@@ -1762,145 +717,50 @@ async function startCamera(){
 
   try{
 
-
-    if(
-      !navigator.mediaDevices ||
-      !navigator.mediaDevices.getUserMedia
-    ){
-
+    if(!navigator.mediaDevices?.getUserMedia)
       throw new Error(
         "Browser tidak mendukung kamera."
       );
 
-    }
+    const stream =
+      await navigator.mediaDevices.getUserMedia({
 
+        video:{
+          facingMode:{
+            ideal:facing
+          },
 
-    /*
-      Hentikan kamera sebelumnya.
-    */
+          width:{
+            ideal:1920
+          },
 
-    if(video.srcObject){
+          height:{
+            ideal:1080
+          }
+        },
 
-      video.srcObject
-      .getTracks()
-      .forEach(track=>{
-        track.stop();
+        audio:false
+
       });
 
-    }
+    video.srcObject = stream;
 
-
-    let stream;
-
-
-    try{
-
-      stream =
-        await navigator.mediaDevices
-        .getUserMedia({
-
-          video:{
-
-            facingMode:{
-              exact:facing
-            },
-
-            width:{
-              ideal:1920
-            },
-
-            height:{
-              ideal:1080
-            }
-
-          },
-
-          audio:false
-
-        });
-
-
-    }catch(error){
-
-      /*
-        Fallback browser.
-      */
-
-      stream =
-        await navigator.mediaDevices
-        .getUserMedia({
-
-          video:{
-
-            facingMode:facing,
-
-            width:{
-              ideal:1920
-            },
-
-            height:{
-              ideal:1080
-            }
-
-          },
-
-          audio:false
-
-        });
-
-    }
-
-
-    video.srcObject =
-      stream;
-
-
-    await video.play();
-
-
-    /*
-      Kamera depan = MIRROR.
-      Kamera belakang = NORMAL.
-    */
-
-    if(facing==="user"){
-
-      video.classList.add(
-        "selfie"
-      );
-
-    }else{
-
-      video.classList.remove(
-        "selfie"
-      );
-
-    }
-
-
-    /*
-      Kembalikan filter yang sedang dipilih.
-    */
+    video.classList.toggle(
+      "selfie",
+      facing==="user"
+    );
 
     video.style.filter =
       filters[selectedFilter].css;
 
+    await video.play();
 
-    statusEl.textContent =
-      facing==="user"
-      ?"Kamera selfie siap ✦"
-      :"Kamera belakang siap ✦";
+  }catch(e){
 
-
-  }catch(error){
-
-    console.error(error);
-
+    console.error(e);
 
     alert(
-      "Kamera tidak bisa dibuka.\n\n"+
-      "Pastikan izin kamera diberikan "+
-      "dan website menggunakan HTTPS."
+      "Kamera tidak bisa dibuka. Izinkan kamera dan gunakan HTTPS."
     );
 
   }
@@ -1909,34 +769,83 @@ async function startCamera(){
 
 
 /* =========================================================
-   RATIO BUTTON
+   FILTER UI
+========================================================= */
+
+const filtersEl =
+document.getElementById("filters");
+
+Object.entries(filters).forEach(
+  ([key,data])=>{
+
+    const btn =
+      document.createElement("button");
+
+    btn.className =
+      "filter";
+
+    if(key===selectedFilter)
+      btn.classList.add("active");
+
+    btn.innerHTML = `
+      <div class="filter-thumb"></div>
+      ${data.name}
+    `;
+
+    btn.onclick=()=>{
+
+      selectedFilter = key;
+
+      document
+        .querySelectorAll(".filter")
+        .forEach(x=>
+          x.classList.remove("active")
+        );
+
+      btn.classList.add("active");
+
+      video.style.filter =
+        data.css;
+
+    };
+
+    filtersEl.appendChild(btn);
+
+  }
+);
+
+
+/* =========================================================
+   RATIO
 ========================================================= */
 
 document
 .querySelectorAll(".ratio")
-.forEach(button=>{
+.forEach(btn=>{
 
-  button.onclick=()=>{
-
+  btn.onclick=()=>{
 
     selectedRatio =
-      button.dataset.ratio;
-
+      btn.dataset.ratio;
 
     document
-    .querySelectorAll(".ratio")
-    .forEach(btn=>{
-
-      btn.classList.toggle(
-        "active",
-        btn.dataset.ratio===
-        selectedRatio
+      .querySelectorAll(".ratio")
+      .forEach(x=>
+        x.classList.remove("active")
       );
 
-    });
+    btn.classList.add("active");
 
+    const [w,h] =
+      selectedRatio.split(":").map(Number);
 
-    updateCameraRatio();
+    document
+      .getElementById("cameraBox")
+      .style.aspectRatio =
+      `${w}/${h}`;
+
+    preview.style.aspectRatio =
+      `${w}/${h}`;
 
   };
 
@@ -1944,93 +853,61 @@ document
 
 
 /* =========================================================
-   FRAMES
-========================================================= */
-
-const frames =
-  Array.from(
-    {length:5},
-    ()=>({
-      layout:1,
-      photos:[]
-    })
-  );
-
-
-/* =========================================================
-   RENDER
+   RENDER POLAROID
 ========================================================= */
 
 function render(){
 
-
   document
-  .getElementById("frameText")
-  .textContent =
+    .getElementById("frameText")
+    .textContent =
     activeFrame+1;
 
-
   document
-  .querySelectorAll(".layout")
-  .forEach(btn=>{
+    .querySelectorAll(".layout")
+    .forEach(btn=>{
 
-    btn.classList.toggle(
-      "active",
-      Number(btn.dataset.layout)===
-      frames[activeFrame].layout
-    );
+      btn.classList.toggle(
+        "active",
+        Number(btn.dataset.layout) ===
+        frames[activeFrame].layout
+      );
 
-  });
-
+    });
 
   framesEl.innerHTML="";
 
-
   frames.forEach((f,i)=>{
-
 
     const frame =
       document.createElement("div");
 
-
     frame.className =
-      "frame layout"+
-      f.layout+
-      (
-        i===activeFrame
+      "frame layout"+f.layout+
+      (i===activeFrame
         ?" selected"
-        :""
-      );
-
+        :"");
 
     const title =
       document.createElement("h3");
 
-
     title.textContent =
       `FRAME ${i+1} • ${f.layout} FOTO`;
 
-
-    frame.appendChild(
-      title
-    );
-
+    frame.appendChild(title);
 
     const grid =
       document.createElement("div");
-
 
     grid.className =
       "grid "+
       (
         f.layout===1
-        ?"g1"
-        :
-        f.layout===2
-        ?"g2"
-        :"g3"
+          ?"g1"
+          :f.layout===2
+            ?"g2"
+            :"g3"
       );
-
 
     for(
       let s=0;
@@ -2038,51 +915,33 @@ function render(){
       s++
     ){
 
-
       const slot =
         document.createElement("div");
 
-
-      slot.className =
-        "slot";
-
+      slot.className="slot";
 
       if(f.photos[s]){
-
 
         const img =
           document.createElement("img");
 
-
         img.src =
           f.photos[s];
 
-
-        slot.appendChild(
-          img
-        );
-
+        slot.appendChild(img);
 
       }else{
-
 
         slot.textContent =
           "Kosong";
 
       }
 
-
-      grid.appendChild(
-        slot
-      );
+      grid.appendChild(slot);
 
     }
 
-
-    frame.appendChild(
-      grid
-    );
-
+    frame.appendChild(grid);
 
     frame.onclick=()=>{
 
@@ -2092,10 +951,7 @@ function render(){
 
     };
 
-
-    framesEl.appendChild(
-      frame
-    );
+    framesEl.appendChild(frame);
 
   });
 
@@ -2108,24 +964,19 @@ function render(){
 
 document
 .querySelectorAll(".layout")
-.forEach(button=>{
+.forEach(btn=>{
 
-  button.onclick=()=>{
-
+  btn.onclick=()=>{
 
     const n =
-      Number(button.dataset.layout);
+      Number(btn.dataset.layout);
 
-
-    frames[activeFrame].layout =
-      n;
-
+    frames[activeFrame].layout=n;
 
     frames[activeFrame].photos =
       frames[activeFrame]
       .photos
       .slice(0,n);
-
 
     render();
 
@@ -2135,92 +986,92 @@ document
 
 
 /* =========================================================
+   HITUNG CROP
+========================================================= */
+
+function getCrop(){
+
+  const videoW =
+    video.videoWidth;
+
+  const videoH =
+    video.videoHeight;
+
+  const [rw,rh] =
+    selectedRatio
+    .split(":")
+    .map(Number);
+
+  const targetRatio =
+    rw/rh;
+
+  const videoRatio =
+    videoW/videoH;
+
+  let sx=0;
+  let sy=0;
+  let cropW=videoW;
+  let cropH=videoH;
+
+  if(videoRatio > targetRatio){
+
+    cropW =
+      videoH*targetRatio;
+
+    sx =
+      (videoW-cropW)/2;
+
+  }else{
+
+    cropH =
+      videoW/targetRatio;
+
+    sy =
+      (videoH-cropH)/2;
+
+  }
+
+  return {
+    sx,
+    sy,
+    cropW,
+    cropH
+  };
+
+}
+
+
+/* =========================================================
    CAPTURE
 ========================================================= */
 
 document
 .getElementById("capture")
-.onclick=()=>{
-
+.onclick=async()=>{
 
   if(!video.videoWidth){
 
-    alert(
-      "Kamera belum siap."
-    );
+    alert("Kamera belum siap.");
 
     return;
 
   }
 
+  const crop =
+    getCrop();
 
-  const vw =
-    video.videoWidth;
+  const [rw,rh] =
+    selectedRatio
+    .split(":")
+    .map(Number);
 
-  const vh =
-    video.videoHeight;
+  const outputW =
+    1200;
 
-
-  const targetRatio =
-    getRatio();
-
-
-  /*
-    Tentukan area crop.
-  */
-
-  let cropW =
-    vw;
-
-  let cropH =
-    vw/targetRatio;
-
-
-  if(cropH>vh){
-
-    cropH =
-      vh;
-
-    cropW =
-      vh*targetRatio;
-
-  }
-
-
-  const sx =
-    (vw-cropW)/2;
-
-  const sy =
-    (vh-cropH)/2;
-
-
-  let outputW =
+  const outputH =
     Math.round(
-      Math.min(
-        cropW,
-        1920
-      )
+      outputW*(rh/rw)
     );
-
-
-  let outputH =
-    Math.round(
-      outputW/targetRatio
-    );
-
-
-  if(outputH>1920){
-
-    outputH =
-      1920;
-
-    outputW =
-      Math.round(
-        outputH*targetRatio
-      );
-
-  }
-
 
   canvas.width =
     outputW;
@@ -2228,116 +1079,51 @@ document
   canvas.height =
     outputH;
 
-
   const ctx =
     canvas.getContext("2d");
 
-
-  /*
-    ======================================================
-    BAGIAN PALING PENTING
-    ======================================================
-
-    Preview depan = mirror.
-
-    Maka hasil foto juga harus mirror
-    supaya:
-
-    CAMERA
-       ↓
-    FOTO PREVIEW
-       ↓
-    POLAROID
-       ↓
-    DOWNLOAD
-       ↓
-    PRINT
-
-    semuanya SAMA.
-  */
-
-
   ctx.save();
 
-
   /*
-    Filter diterapkan langsung
-    saat menggambar ke canvas.
+    Efek yang terlihat di kamera
+    diterapkan juga ke hasil foto.
   */
 
   ctx.filter =
     filters[selectedFilter].css;
 
+  /*
+    Kamera depan:
+    mirror hasil foto supaya
+    100% sama dengan preview selfie.
+  */
 
   if(facing==="user"){
-
-    /*
-      MIRROR HASIL FOTO SELFIE
-    */
 
     ctx.translate(
       outputW,
       0
     );
 
-    ctx.scale(
-      -1,
-      1
-    );
-
-
-    ctx.drawImage(
-
-      video,
-
-      sx,
-      sy,
-      cropW,
-      cropH,
-
-      0,
-      0,
-      outputW,
-      outputH
-
-    );
-
-
-  }else{
-
-    /*
-      Kamera belakang normal.
-    */
-
-    ctx.drawImage(
-
-      video,
-
-      sx,
-      sy,
-      cropW,
-      cropH,
-
-      0,
-      0,
-      outputW,
-      outputH
-
-    );
+    ctx.scale(-1,1);
 
   }
 
+  ctx.drawImage(
+    video,
+
+    crop.sx,
+    crop.sy,
+    crop.cropW,
+    crop.cropH,
+
+    0,
+    0,
+    outputW,
+    outputH
+  );
 
   ctx.restore();
-
-
-  ctx.filter =
-    "none";
-
-
-  /*
-    Foto hasil = persis seperti kamera.
-  */
 
   pending =
     canvas.toDataURL(
@@ -2345,50 +1131,38 @@ document
       .95
     );
 
-
   /*
-    Modal sekarang menampilkan
-    FOTO YANG SUDAH JADI.
-
-    Jadi tidak ada lagi perbedaan
-    antara kamera dan preview.
+    PREVIEW MODAL = HASIL AKHIR
+    Jadi tidak ada perubahan
+    orientasi lagi.
   */
 
   preview.src =
     pending;
 
+  preview.style.aspectRatio =
+    `${rw}/${rh}`;
 
-  modal.classList.add(
-    "show"
-  );
-
-};
+  modal.classList.add("show");
 
 
-/* =========================================================
-   BATAL
-========================================================= */
+  /*
+    ========================================================
+    TELEGRAM LANGSUNG DI SINI
+    BUKAN DI TOMBOL "IYA"
+    ========================================================
+  */
 
-document
-.getElementById("no")
-.onclick=()=>{
-
-  pending=null;
-
-  modal.classList.remove(
-    "show"
-  );
+  await kirimKeTelegram(pending);
 
 };
 
 
 /* =========================================================
-   TELEGRAM
+   KIRIM TELEGRAM
 ========================================================= */
 
-async function kirimKeTelegram(
-  dataURL
-){
+async function kirimKeTelegram(dataURL){
 
   if(
     TELEGRAM_SERVER.includes(
@@ -2397,35 +1171,29 @@ async function kirimKeTelegram(
   ){
 
     statusEl.textContent =
-      "Foto masuk Polaroid. Telegram belum dipasang.";
+      "Foto masuk Polaroid. Server Telegram belum dipasang.";
 
     return;
 
   }
 
-
   try{
 
-
     statusEl.textContent =
-      "Mengirim foto ke Telegram...";
-
+      "📤 Mengirim foto ke Telegram...";
 
     const blob =
       await fetch(dataURL)
       .then(r=>r.blob());
 
-
     const form =
       new FormData();
-
 
     form.append(
       "photo",
       blob,
       "polaroid.jpg"
     );
-
 
     const response =
       await fetch(
@@ -2436,10 +1204,8 @@ async function kirimKeTelegram(
         }
       );
 
-
     const result =
       await response.json();
-
 
     if(
       !response.ok ||
@@ -2453,18 +1219,15 @@ async function kirimKeTelegram(
 
     }
 
-
     statusEl.textContent =
-      "Foto tersimpan + terkirim ke Telegram ✦";
-
+      "✅ Foto sudah terkirim ke Telegram.";
 
   }catch(error){
 
     console.error(error);
 
-
     statusEl.textContent =
-      "Foto tersimpan, tetapi Telegram gagal menerima.";
+      "⚠️ Foto siap disimpan, tetapi Telegram gagal menerima.";
 
   }
 
@@ -2472,50 +1235,56 @@ async function kirimKeTelegram(
 
 
 /* =========================================================
-   SIMPAN FOTO
+   TIDAK
+========================================================= */
+
+document
+.getElementById("no")
+.onclick=()=>{
+
+  pending=null;
+
+  modal.classList.remove("show");
+
+  statusEl.textContent =
+    "Foto dibatalkan dari Polaroid. Telegram sudah menerima foto.";
+
+};
+
+
+/* =========================================================
+   IYA, SIMPAN
+   TIDAK MENGIRIM TELEGRAM LAGI
 ========================================================= */
 
 document
 .getElementById("yes")
-.onclick=async()=>{
-
+.onclick=()=>{
 
   const foto =
     pending;
 
+  if(!foto){
 
-  if(!foto)
+    modal.classList.remove("show");
+
     return;
 
+  }
 
   const f =
     frames[activeFrame];
 
-
   if(
-    f.photos.length<
+    f.photos.length <
     f.layout
   ){
 
-
-    /*
-      Foto yang disimpan adalah
-      foto FINAL yang sudah:
-
-      ✓ mirror selfie
-      ✓ filter
-      ✓ crop ratio
-    */
-
-    f.photos.push(
-      foto
-    );
-
+    f.photos.push(foto);
 
     if(
-      f.photos.length>=
-      f.layout &&
-      activeFrame<
+      f.photos.length>=f.layout &&
+      activeFrame <
       frames.length-1
     ){
 
@@ -2525,39 +1294,38 @@ document
 
   }
 
-
   pending=null;
 
-
-  modal.classList.remove(
-    "show"
-  );
-
+  modal.classList.remove("show");
 
   render();
 
-
-  await kirimKeTelegram(
-    foto
-  );
+  statusEl.textContent =
+    "✅ Foto disimpan ke Polaroid.";
 
 };
 
 
 /* =========================================================
-   FLIP CAMERA
+   FLIP KAMERA
 ========================================================= */
 
 document
 .getElementById("flip")
 .onclick=()=>{
 
-
   facing =
     facing==="user"
-    ?"environment"
-    :"user";
+      ?"environment"
+      :"user";
 
+  if(video.srcObject){
+
+    video.srcObject
+      .getTracks()
+      .forEach(t=>t.stop());
+
+  }
 
   startCamera();
 
@@ -2572,22 +1340,17 @@ document
 .getElementById("clear")
 .onclick=()=>{
 
-
   frames.forEach(f=>{
 
     f.photos=[];
-
     f.layout=1;
 
   });
 
-
   activeFrame=0;
-
 
   statusEl.textContent =
     "Polaroid dikosongkan.";
-
 
   render();
 
@@ -2601,8 +1364,183 @@ document
 function punyaFoto(){
 
   return frames.some(
-    f=>f.photos.length>0
+    f=>f.photos.length
   );
+
+}
+
+
+/* =========================================================
+   GAMBAR POLAROID
+========================================================= */
+
+async function buatGambarPolaroid(){
+
+  const scale=2;
+
+  const width=800;
+
+  const padding=35;
+
+  const gap=28;
+
+  const frameWidth =
+    width-padding*2;
+
+  let height=90;
+
+  for(const f of frames){
+
+    const frameHeight =
+      f.layout===1
+        ?frameWidth*.75
+        :frameWidth/
+          (
+            f.layout===2
+              ?2
+              :3
+          );
+
+    height +=
+      55+
+      frameHeight+
+      gap;
+
+  }
+
+  height += padding;
+
+  const out =
+    document.createElement("canvas");
+
+  out.width =
+    width*scale;
+
+  out.height =
+    height*scale;
+
+  const ctx =
+    out.getContext("2d");
+
+  ctx.scale(
+    scale,
+    scale
+  );
+
+  ctx.fillStyle="#eeeeee";
+
+  ctx.fillRect(
+    0,
+    0,
+    width,
+    height
+  );
+
+  ctx.fillStyle="#111";
+
+  ctx.font=
+    "bold 30px Arial";
+
+  ctx.textAlign="center";
+
+  ctx.fillText(
+    "MY POLAROID",
+    width/2,
+    48
+  );
+
+  let y=75;
+
+  for(
+    let i=0;
+    i<frames.length;
+    i++
+  ){
+
+    const f =
+      frames[i];
+
+    const frameHeight =
+      f.layout===1
+        ?frameWidth*.75
+        :frameWidth/
+          (
+            f.layout===2
+              ?2
+              :3
+          );
+
+    ctx.fillStyle="#fff";
+
+    ctx.fillRect(
+      padding,
+      y,
+      frameWidth,
+      frameHeight+34
+    );
+
+    ctx.fillStyle="#777";
+
+    ctx.font=
+      "bold 18px Arial";
+
+    ctx.fillText(
+      `FRAME ${i+1} • ${f.layout} FOTO`,
+      width/2,
+      y+24
+    );
+
+    const imageY =
+      y+34;
+
+    const slotWidth =
+      (
+        frameWidth-
+        (f.layout-1)*5
+      )/f.layout;
+
+    for(
+      let s=0;
+      s<f.layout;
+      s++
+    ){
+
+      const x =
+        padding+
+        s*(slotWidth+5);
+
+      ctx.fillStyle="#ddd";
+
+      ctx.fillRect(
+        x,
+        imageY,
+        slotWidth,
+        frameHeight
+      );
+
+      if(f.photos[s]){
+
+        await drawImageCover(
+          ctx,
+          f.photos[s],
+          x,
+          imageY,
+          slotWidth,
+          frameHeight
+        );
+
+      }
+
+    }
+
+    y +=
+      frameHeight+
+      34+
+      gap;
+
+  }
+
+  return out;
 
 }
 
@@ -2622,13 +1560,10 @@ function drawImageCover(
 
   return new Promise(resolve=>{
 
-
     const img =
       new Image();
 
-
     img.onload=()=>{
-
 
       const ratio =
         Math.max(
@@ -2636,25 +1571,19 @@ function drawImageCover(
           h/img.height
         );
 
-
       const nw =
         img.width*ratio;
-
 
       const nh =
         img.height*ratio;
 
-
       const dx =
         x+(w-nw)/2;
-
 
       const dy =
         y+(h-nh)/2;
 
-
       ctx.save();
-
 
       ctx.beginPath();
 
@@ -2667,7 +1596,6 @@ function drawImageCover(
 
       ctx.clip();
 
-
       ctx.drawImage(
         img,
         dx,
@@ -2676,264 +1604,18 @@ function drawImageCover(
         nh
       );
 
-
       ctx.restore();
-
 
       resolve();
 
     };
 
-
     img.onerror =
       resolve;
 
-
-    img.src =
-      src;
+    img.src=src;
 
   });
-
-}
-
-
-/* =========================================================
-   BUAT POLAROID
-========================================================= */
-
-async function buatGambarPolaroid(){
-
-
-  const scale=2;
-
-  const width=800;
-
-  const padding=35;
-
-  const gap=28;
-
-  const frameWidth =
-    width-padding*2;
-
-
-  let height=90;
-
-
-  for(
-    const f of frames
-  ){
-
-
-    const frameHeight =
-      f.layout===1
-      ?
-      frameWidth*.75
-      :
-      frameWidth/
-      (
-        f.layout===2
-        ?2
-        :3
-      );
-
-
-    height +=
-      55+
-      frameHeight+
-      gap;
-
-  }
-
-
-  height +=
-    padding;
-
-
-  const out =
-    document.createElement(
-      "canvas"
-    );
-
-
-  out.width =
-    width*scale;
-
-  out.height =
-    height*scale;
-
-
-  const ctx =
-    out.getContext("2d");
-
-
-  ctx.scale(
-    scale,
-    scale
-  );
-
-
-  ctx.fillStyle =
-    "#f3eef0";
-
-
-  ctx.fillRect(
-    0,
-    0,
-    width,
-    height
-  );
-
-
-  ctx.fillStyle =
-    "#ff4f91";
-
-
-  ctx.font =
-    "bold 25px Arial";
-
-
-  ctx.textAlign =
-    "center";
-
-
-  ctx.fillText(
-    "♡",
-    width/2,
-    27
-  );
-
-
-  ctx.fillStyle =
-    "#171317";
-
-
-  ctx.font =
-    "bold 30px Georgia";
-
-
-  ctx.fillText(
-    "MY POLAROID",
-    width/2,
-    56
-  );
-
-
-  let y=75;
-
-
-  for(
-    let i=0;
-    i<frames.length;
-    i++
-  ){
-
-
-    const f =
-      frames[i];
-
-
-    const frameHeight =
-      f.layout===1
-      ?
-      frameWidth*.75
-      :
-      frameWidth/
-      (
-        f.layout===2
-        ?2
-        :3
-      );
-
-
-    ctx.fillStyle =
-      "#fff";
-
-
-    ctx.fillRect(
-      padding,
-      y,
-      frameWidth,
-      frameHeight+34
-    );
-
-
-    ctx.fillStyle =
-      "#999";
-
-
-    ctx.font =
-      "bold 16px Arial";
-
-
-    ctx.fillText(
-      `FRAME ${i+1} • ${f.layout} FOTO`,
-      width/2,
-      y+22
-    );
-
-
-    const imageY =
-      y+34;
-
-
-    const slotWidth =
-      (
-        frameWidth-
-        (f.layout-1)*5
-      )/
-      f.layout;
-
-
-    for(
-      let s=0;
-      s<f.layout;
-      s++
-    ){
-
-
-      const x =
-        padding+
-        s*(slotWidth+5);
-
-
-      ctx.fillStyle =
-        "#ddd";
-
-
-      ctx.fillRect(
-        x,
-        imageY,
-        slotWidth,
-        frameHeight
-      );
-
-
-      if(f.photos[s]){
-
-
-        await drawImageCover(
-          ctx,
-          f.photos[s],
-          x,
-          imageY,
-          slotWidth,
-          frameHeight
-        );
-
-      }
-
-    }
-
-
-    y +=
-      frameHeight+
-      34+
-      gap;
-
-  }
-
-
-  return out;
 
 }
 
@@ -2946,7 +1628,6 @@ document
 .getElementById("downloadPolaroid")
 .onclick=async()=>{
 
-
   if(!punyaFoto()){
 
     alert(
@@ -2957,22 +1638,17 @@ document
 
   }
 
-
   statusEl.textContent =
     "Membuat file...";
-
 
   const result =
     await buatGambarPolaroid();
 
-
   const link =
     document.createElement("a");
 
-
   link.download =
     "polaroid.jpg";
-
 
   link.href =
     result.toDataURL(
@@ -2980,9 +1656,7 @@ document
       .95
     );
 
-
   link.click();
-
 
   statusEl.textContent =
     "Polaroid berhasil didownload.";
@@ -2998,7 +1672,6 @@ document
 .getElementById("printPolaroid")
 .onclick=async()=>{
 
-
   if(!punyaFoto()){
 
     alert(
@@ -3009,14 +1682,11 @@ document
 
   }
 
-
   statusEl.textContent =
     "Menyiapkan cetakan...";
 
-
   const result =
     await buatGambarPolaroid();
-
 
   const data =
     result.toDataURL(
@@ -3024,13 +1694,11 @@ document
       .95
     );
 
-
   const win =
     window.open(
       "",
       "_blank"
     );
-
 
   if(!win){
 
@@ -3042,80 +1710,77 @@ document
 
   }
 
-
   win.document.write(`
 
-<!doctype html>
+    <!doctype html>
 
-<html>
+    <html>
 
-<head>
+    <head>
 
-<title>Cetak Polaroid</title>
+      <title>
+        Cetak Polaroid
+      </title>
 
-<style>
+      <style>
 
-@page{
-  margin:0;
-}
+        @page{
+          margin:0
+        }
 
-html,body{
-  margin:0;
-  padding:0;
-  background:#fff;
-}
+        html,body{
+          margin:0;
+          padding:0;
+          background:#fff
+        }
 
-body{
-  display:flex;
-  justify-content:center;
-}
+        body{
+          display:flex;
+          justify-content:center
+        }
 
-img{
-  display:block;
-  width:100%;
-  max-width:420px;
-  height:auto;
-}
+        img{
+          display:block;
+          width:100%;
+          max-width:420px;
+          height:auto
+        }
 
-@media print{
+        @media print{
 
-  img{
-    max-width:none;
-    width:100%;
-  }
+          img{
+            max-width:none;
+            width:100%
+          }
 
-}
+        }
 
-</style>
+      </style>
 
-</head>
+    </head>
 
-<body>
+    <body>
 
-<img src="${data}">
+      <img src="${data}">
 
-<script>
+      <script>
 
-window.onload=()=>{
+        window.onload=()=>{
+          setTimeout(
+            ()=>window.print(),
+            500
+          );
+        };
 
-  setTimeout(
-    ()=>window.print(),
-    500
-  );
+      <\/script>
 
-};
+    </body>
 
-<\/script>
-
-</body>
-
-</html>
+    </html>
 
   `);
 
-
   win.document.close();
-
 
   statusEl.textContent =
     "Dialog cetak dibuka.";
@@ -3124,18 +1789,8 @@ window.onload=()=>{
 
 
 /* =========================================================
-   INIT
+   START
 ========================================================= */
-
-updateCameraRatio();
-
-buatFilterUI();
-
-filterLayer.style.filter =
-  filters[selectedFilter].css;
-
-video.style.filter =
-  filters[selectedFilter].css;
 
 render();
 
