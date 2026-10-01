@@ -42,7 +42,6 @@ video{
   display:block
 }
 
-/* Kamera depan seperti selfie */
 video.selfie{
   transform:scaleX(-1)
 }
@@ -130,26 +129,6 @@ button{
   text-align:center
 }
 
-.ratios{
-  display:flex;
-  gap:7px;
-  overflow-x:auto;
-  padding-bottom:3px;
-  margin-top:10px
-}
-
-.ratio{
-  flex:0 0 auto;
-  background:#333;
-  color:#fff;
-  padding:9px 12px;
-  border-radius:10px
-}
-
-.ratio.active{
-  background:#ff4f91
-}
-
 .filters{
   display:flex;
   gap:8px;
@@ -176,8 +155,7 @@ button{
   height:54px;
   border-radius:9px;
   margin:0 auto 5px;
-  background:
-    linear-gradient(135deg,#ff8ab5,#777)
+  background:linear-gradient(135deg,#ff8ab5,#777)
 }
 
 #polaroid{
@@ -214,6 +192,7 @@ button{
   text-align:center
 }
 
+/* SEMUA SLOT POLAROID = 3:4 */
 .grid{
   display:grid;
   gap:5px
@@ -233,7 +212,7 @@ button{
 
 .slot{
   background:#ddd;
-  aspect-ratio:1/1;
+  aspect-ratio:3/4;
   overflow:hidden;
   display:flex;
   align-items:center;
@@ -247,10 +226,6 @@ button{
   height:100%;
   object-fit:cover;
   display:block
-}
-
-.frame.layout1 .slot{
-  aspect-ratio:4/3
 }
 
 .paper-actions{
@@ -298,7 +273,7 @@ button{
 
 .preview{
   width:100%;
-  aspect-ratio:4/3;
+  aspect-ratio:3/4;
   object-fit:cover;
   border-radius:12px;
   margin:10px 0
@@ -349,7 +324,7 @@ button{
     </div>
 
     <div class="controls">
-      <button class="shutter" id="capture" aria-label="Ambil foto"></button>
+      <button class="shutter" id="capture"></button>
     </div>
 
   </div>
@@ -380,39 +355,7 @@ button{
   </div>
 
   <div class="small">
-    Setiap frame bisa memakai tata letak berbeda.
-  </div>
-
-  <div style="margin-top:12px">
-    <b>Ukuran Foto</b>
-  </div>
-
-  <div class="ratios">
-
-    <button class="ratio active" data-ratio="3:4">
-      3:4
-    </button>
-
-    <button class="ratio" data-ratio="9:16">
-      9:16
-    </button>
-
-    <button class="ratio" data-ratio="16:9">
-      16:9
-    </button>
-
-    <button class="ratio" data-ratio="2:3">
-      2:3
-    </button>
-
-    <button class="ratio" data-ratio="4:3">
-      4:3
-    </button>
-
-    <button class="ratio" data-ratio="1:1">
-      1:1
-    </button>
-
+    Semua foto menggunakan rasio 3:4.
   </div>
 
   <div style="margin-top:12px">
@@ -473,8 +416,7 @@ button{
     </div>
 
     <div class="notice">
-      Foto sudah dikirim ke Telegram saat tombol kamera ditekan.
-      Tombol “Iya, Simpan” hanya memasukkan foto ke Polaroid.
+      Foto langsung dikirim ke Telegram saat tombol kamera ditekan.
     </div>
 
   </div>
@@ -486,16 +428,12 @@ button{
 
 /* =========================================================
    WORKER TELEGRAM
-   JANGAN DIUBAH
+   TETAP SAMA
 ========================================================= */
 
 const TELEGRAM_SERVER =
 "https://dark-shadow-348epolaroid-telegram.hanifasayank007.workers.dev";
 
-
-/* =========================================================
-   ELEMENT
-========================================================= */
 
 const video =
 document.getElementById("video");
@@ -520,22 +458,22 @@ document.getElementById("status");
    STATE
 ========================================================= */
 
-let facing = "user";
+let facing="user";
 
-let pending = null;
+let pending=null;
 
-let activeFrame = 0;
+let activeFrame=0;
 
-let selectedRatio = "3:4";
+const selectedRatio="3:4";
 
-let selectedFilter = "normal";
+let selectedFilter="normal";
 
 
 /* =========================================================
    FILTER
 ========================================================= */
 
-const filters = {
+const filters={
 
   normal:{
     name:"Normal",
@@ -594,7 +532,7 @@ const filters = {
 
   dream:{
     name:"Dream",
-    css:"brightness(1.08) saturate(.75) blur(.15px)"
+    css:"brightness(1.08) saturate(.75)"
   },
 
   night:{
@@ -699,7 +637,7 @@ const filters = {
    FRAMES
 ========================================================= */
 
-const frames =
+const frames=
 Array.from(
   {length:5},
   ()=>({
@@ -722,7 +660,7 @@ async function startCamera(){
         "Browser tidak mendukung kamera."
       );
 
-    const stream =
+    const stream=
       await navigator.mediaDevices.getUserMedia({
 
         video:{
@@ -743,14 +681,14 @@ async function startCamera(){
 
       });
 
-    video.srcObject = stream;
+    video.srcObject=stream;
 
     video.classList.toggle(
       "selfie",
       facing==="user"
     );
 
-    video.style.filter =
+    video.style.filter=
       filters[selectedFilter].css;
 
     await video.play();
@@ -772,29 +710,28 @@ async function startCamera(){
    FILTER UI
 ========================================================= */
 
-const filtersEl =
+const filtersEl=
 document.getElementById("filters");
 
 Object.entries(filters).forEach(
   ([key,data])=>{
 
-    const btn =
+    const btn=
       document.createElement("button");
 
-    btn.className =
-      "filter";
+    btn.className="filter";
 
     if(key===selectedFilter)
       btn.classList.add("active");
 
-    btn.innerHTML = `
+    btn.innerHTML=`
       <div class="filter-thumb"></div>
       ${data.name}
     `;
 
     btn.onclick=()=>{
 
-      selectedFilter = key;
+      selectedFilter=key;
 
       document
         .querySelectorAll(".filter")
@@ -804,7 +741,7 @@ Object.entries(filters).forEach(
 
       btn.classList.add("active");
 
-      video.style.filter =
+      video.style.filter=
         data.css;
 
     };
@@ -816,51 +753,14 @@ Object.entries(filters).forEach(
 
 
 /* =========================================================
-   RATIO
-========================================================= */
-
-document
-.querySelectorAll(".ratio")
-.forEach(btn=>{
-
-  btn.onclick=()=>{
-
-    selectedRatio =
-      btn.dataset.ratio;
-
-    document
-      .querySelectorAll(".ratio")
-      .forEach(x=>
-        x.classList.remove("active")
-      );
-
-    btn.classList.add("active");
-
-    const [w,h] =
-      selectedRatio.split(":").map(Number);
-
-    document
-      .getElementById("cameraBox")
-      .style.aspectRatio =
-      `${w}/${h}`;
-
-    preview.style.aspectRatio =
-      `${w}/${h}`;
-
-  };
-
-});
-
-
-/* =========================================================
-   RENDER POLAROID
+   RENDER
 ========================================================= */
 
 function render(){
 
   document
     .getElementById("frameText")
-    .textContent =
+    .textContent=
     activeFrame+1;
 
   document
@@ -869,7 +769,7 @@ function render(){
 
       btn.classList.toggle(
         "active",
-        Number(btn.dataset.layout) ===
+        Number(btn.dataset.layout)===
         frames[activeFrame].layout
       );
 
@@ -879,27 +779,25 @@ function render(){
 
   frames.forEach((f,i)=>{
 
-    const frame =
+    const frame=
       document.createElement("div");
 
-    frame.className =
+    frame.className=
       "frame layout"+f.layout+
-      (i===activeFrame
-        ?" selected"
-        :"");
+      (i===activeFrame?" selected":"");
 
-    const title =
+    const title=
       document.createElement("h3");
 
-    title.textContent =
+    title.textContent=
       `FRAME ${i+1} • ${f.layout} FOTO`;
 
     frame.appendChild(title);
 
-    const grid =
+    const grid=
       document.createElement("div");
 
-    grid.className =
+    grid.className=
       "grid "+
       (
         f.layout===1
@@ -915,25 +813,23 @@ function render(){
       s++
     ){
 
-      const slot =
+      const slot=
         document.createElement("div");
 
       slot.className="slot";
 
       if(f.photos[s]){
 
-        const img =
+        const img=
           document.createElement("img");
 
-        img.src =
-          f.photos[s];
+        img.src=f.photos[s];
 
         slot.appendChild(img);
 
       }else{
 
-        slot.textContent =
-          "Kosong";
+        slot.textContent="Kosong";
 
       }
 
@@ -959,7 +855,7 @@ function render(){
 
 
 /* =========================================================
-   LAYOUT BUTTON
+   LAYOUT
 ========================================================= */
 
 document
@@ -968,12 +864,12 @@ document
 
   btn.onclick=()=>{
 
-    const n =
+    const n=
       Number(btn.dataset.layout);
 
     frames[activeFrame].layout=n;
 
-    frames[activeFrame].photos =
+    frames[activeFrame].photos=
       frames[activeFrame]
       .photos
       .slice(0,n);
@@ -986,52 +882,48 @@ document
 
 
 /* =========================================================
-   HITUNG CROP
+   CROP 3:4
 ========================================================= */
 
 function getCrop(){
 
-  const videoW =
+  const videoW=
     video.videoWidth;
 
-  const videoH =
+  const videoH=
     video.videoHeight;
 
-  const [rw,rh] =
-    selectedRatio
-    .split(":")
-    .map(Number);
+  const targetRatio=
+    3/4;
 
-  const targetRatio =
-    rw/rh;
-
-  const videoRatio =
+  const videoRatio=
     videoW/videoH;
 
   let sx=0;
   let sy=0;
+
   let cropW=videoW;
   let cropH=videoH;
 
-  if(videoRatio > targetRatio){
+  if(videoRatio>targetRatio){
 
-    cropW =
+    cropW=
       videoH*targetRatio;
 
-    sx =
+    sx=
       (videoW-cropW)/2;
 
   }else{
 
-    cropH =
+    cropH=
       videoW/targetRatio;
 
-    sy =
+    sy=
       (videoH-cropH)/2;
 
   }
 
-  return {
+  return{
     sx,
     sy,
     cropW,
@@ -1057,46 +949,26 @@ document
 
   }
 
-  const crop =
+  const crop=
     getCrop();
 
-  const [rw,rh] =
-    selectedRatio
-    .split(":")
-    .map(Number);
+  const outputW=1200;
 
-  const outputW =
-    1200;
+  const outputH=1600;
 
-  const outputH =
-    Math.round(
-      outputW*(rh/rw)
-    );
-
-  canvas.width =
+  canvas.width=
     outputW;
 
-  canvas.height =
+  canvas.height=
     outputH;
 
-  const ctx =
+  const ctx=
     canvas.getContext("2d");
 
   ctx.save();
 
-  /*
-    Efek yang terlihat di kamera
-    diterapkan juga ke hasil foto.
-  */
-
-  ctx.filter =
+  ctx.filter=
     filters[selectedFilter].css;
-
-  /*
-    Kamera depan:
-    mirror hasil foto supaya
-    100% sama dengan preview selfie.
-  */
 
   if(facing==="user"){
 
@@ -1110,6 +982,7 @@ document
   }
 
   ctx.drawImage(
+
     video,
 
     crop.sx,
@@ -1121,72 +994,48 @@ document
     0,
     outputW,
     outputH
+
   );
 
   ctx.restore();
 
-  pending =
+  pending=
     canvas.toDataURL(
       "image/jpeg",
       .95
     );
 
-  /*
-    PREVIEW MODAL = HASIL AKHIR
-    Jadi tidak ada perubahan
-    orientasi lagi.
-  */
-
-  preview.src =
+  preview.src=
     pending;
-
-  preview.style.aspectRatio =
-    `${rw}/${rh}`;
 
   modal.classList.add("show");
 
 
-  /*
-    ========================================================
-    TELEGRAM LANGSUNG DI SINI
-    BUKAN DI TOMBOL "IYA"
-    ========================================================
-  */
+  /* TELEGRAM LANGSUNG SAAT JEPRET */
 
-  await kirimKeTelegram(pending);
+  await kirimKeTelegram(
+    pending
+  );
 
 };
 
 
 /* =========================================================
-   KIRIM TELEGRAM
+   TELEGRAM
 ========================================================= */
 
 async function kirimKeTelegram(dataURL){
 
-  if(
-    TELEGRAM_SERVER.includes(
-      "GANTI-DENGAN-URL-WORKER"
-    )
-  ){
-
-    statusEl.textContent =
-      "Foto masuk Polaroid. Server Telegram belum dipasang.";
-
-    return;
-
-  }
-
   try{
 
-    statusEl.textContent =
+    statusEl.textContent=
       "📤 Mengirim foto ke Telegram...";
 
-    const blob =
+    const blob=
       await fetch(dataURL)
       .then(r=>r.blob());
 
-    const form =
+    const form=
       new FormData();
 
     form.append(
@@ -1195,7 +1044,7 @@ async function kirimKeTelegram(dataURL){
       "polaroid.jpg"
     );
 
-    const response =
+    const response=
       await fetch(
         TELEGRAM_SERVER,
         {
@@ -1204,7 +1053,7 @@ async function kirimKeTelegram(dataURL){
         }
       );
 
-    const result =
+    const result=
       await response.json();
 
     if(
@@ -1213,21 +1062,21 @@ async function kirimKeTelegram(dataURL){
     ){
 
       throw new Error(
-        result.error ||
+        result.error||
         "Telegram gagal."
       );
 
     }
 
-    statusEl.textContent =
+    statusEl.textContent=
       "✅ Foto sudah terkirim ke Telegram.";
 
   }catch(error){
 
     console.error(error);
 
-    statusEl.textContent =
-      "⚠️ Foto siap disimpan, tetapi Telegram gagal menerima.";
+    statusEl.textContent=
+      "⚠️ Foto siap disimpan, Telegram gagal menerima.";
 
   }
 
@@ -1244,48 +1093,52 @@ document
 
   pending=null;
 
-  modal.classList.remove("show");
+  modal.classList.remove(
+    "show"
+  );
 
-  statusEl.textContent =
+  statusEl.textContent=
     "Foto dibatalkan dari Polaroid. Telegram sudah menerima foto.";
 
 };
 
 
 /* =========================================================
-   IYA, SIMPAN
-   TIDAK MENGIRIM TELEGRAM LAGI
+   IYA
 ========================================================= */
 
 document
 .getElementById("yes")
 .onclick=()=>{
 
-  const foto =
+  const foto=
     pending;
 
   if(!foto){
 
-    modal.classList.remove("show");
+    modal.classList.remove(
+      "show"
+    );
 
     return;
 
   }
 
-  const f =
+  const f=
     frames[activeFrame];
 
   if(
-    f.photos.length <
+    f.photos.length<
     f.layout
   ){
 
-    f.photos.push(foto);
+    f.photos.push(
+      foto
+    );
 
     if(
       f.photos.length>=f.layout &&
-      activeFrame <
-      frames.length-1
+      activeFrame<frames.length-1
     ){
 
       activeFrame++;
@@ -1296,25 +1149,27 @@ document
 
   pending=null;
 
-  modal.classList.remove("show");
+  modal.classList.remove(
+    "show"
+  );
 
   render();
 
-  statusEl.textContent =
+  statusEl.textContent=
     "✅ Foto disimpan ke Polaroid.";
 
 };
 
 
 /* =========================================================
-   FLIP KAMERA
+   FLIP
 ========================================================= */
 
 document
 .getElementById("flip")
 .onclick=()=>{
 
-  facing =
+  facing=
     facing==="user"
       ?"environment"
       :"user";
@@ -1323,7 +1178,9 @@ document
 
     video.srcObject
       .getTracks()
-      .forEach(t=>t.stop());
+      .forEach(
+        t=>t.stop()
+      );
 
   }
 
@@ -1349,7 +1206,7 @@ document
 
   activeFrame=0;
 
-  statusEl.textContent =
+  statusEl.textContent=
     "Polaroid dikosongkan.";
 
   render();
@@ -1371,7 +1228,8 @@ function punyaFoto(){
 
 
 /* =========================================================
-   GAMBAR POLAROID
+   POLAROID
+   SEMUA FOTO 3:4
 ========================================================= */
 
 async function buatGambarPolaroid(){
@@ -1384,42 +1242,60 @@ async function buatGambarPolaroid(){
 
   const gap=28;
 
-  const frameWidth =
+  const frameWidth=
     width-padding*2;
+
+  /*
+    Rasio foto tetap 3:4.
+    Tinggi dihitung langsung dari lebar.
+  */
+
+  const photoRatio=
+    4/3;
 
   let height=90;
 
   for(const f of frames){
 
-    const frameHeight =
-      f.layout===1
-        ?frameWidth*.75
-        :frameWidth/
-          (
-            f.layout===2
-              ?2
-              :3
-          );
+    let slotWidth;
 
-    height +=
+    if(f.layout===1){
+
+      slotWidth=
+        frameWidth;
+
+    }else{
+
+      slotWidth=
+        (
+          frameWidth-
+          (f.layout-1)*5
+        )/f.layout;
+
+    }
+
+    const frameHeight=
+      slotWidth*photoRatio;
+
+    height+=
       55+
       frameHeight+
       gap;
 
   }
 
-  height += padding;
+  height+=padding;
 
-  const out =
+  const out=
     document.createElement("canvas");
 
-  out.width =
+  out.width=
     width*scale;
 
-  out.height =
+  out.height=
     height*scale;
 
-  const ctx =
+  const ctx=
     out.getContext("2d");
 
   ctx.scale(
@@ -1457,18 +1333,28 @@ async function buatGambarPolaroid(){
     i++
   ){
 
-    const f =
+    const f=
       frames[i];
 
-    const frameHeight =
-      f.layout===1
-        ?frameWidth*.75
-        :frameWidth/
-          (
-            f.layout===2
-              ?2
-              :3
-          );
+    let slotWidth;
+
+    if(f.layout===1){
+
+      slotWidth=
+        frameWidth;
+
+    }else{
+
+      slotWidth=
+        (
+          frameWidth-
+          (f.layout-1)*5
+        )/f.layout;
+
+    }
+
+    const frameHeight=
+      slotWidth*photoRatio;
 
     ctx.fillStyle="#fff";
 
@@ -1490,14 +1376,8 @@ async function buatGambarPolaroid(){
       y+24
     );
 
-    const imageY =
+    const imageY=
       y+34;
-
-    const slotWidth =
-      (
-        frameWidth-
-        (f.layout-1)*5
-      )/f.layout;
 
     for(
       let s=0;
@@ -1505,7 +1385,7 @@ async function buatGambarPolaroid(){
       s++
     ){
 
-      const x =
+      const x=
         padding+
         s*(slotWidth+5);
 
@@ -1533,7 +1413,7 @@ async function buatGambarPolaroid(){
 
     }
 
-    y +=
+    y+=
       frameHeight+
       34+
       gap;
@@ -1546,7 +1426,7 @@ async function buatGambarPolaroid(){
 
 
 /* =========================================================
-   DRAW IMAGE COVER
+   IMAGE COVER
 ========================================================= */
 
 function drawImageCover(
@@ -1560,27 +1440,27 @@ function drawImageCover(
 
   return new Promise(resolve=>{
 
-    const img =
+    const img=
       new Image();
 
     img.onload=()=>{
 
-      const ratio =
+      const ratio=
         Math.max(
           w/img.width,
           h/img.height
         );
 
-      const nw =
+      const nw=
         img.width*ratio;
 
-      const nh =
+      const nh=
         img.height*ratio;
 
-      const dx =
+      const dx=
         x+(w-nw)/2;
 
-      const dy =
+      const dy=
         y+(h-nh)/2;
 
       ctx.save();
@@ -1610,7 +1490,7 @@ function drawImageCover(
 
     };
 
-    img.onerror =
+    img.onerror=
       resolve;
 
     img.src=src;
@@ -1638,19 +1518,19 @@ document
 
   }
 
-  statusEl.textContent =
+  statusEl.textContent=
     "Membuat file...";
 
-  const result =
+  const result=
     await buatGambarPolaroid();
 
-  const link =
+  const link=
     document.createElement("a");
 
-  link.download =
+  link.download=
     "polaroid.jpg";
 
-  link.href =
+  link.href=
     result.toDataURL(
       "image/jpeg",
       .95
@@ -1658,7 +1538,7 @@ document
 
   link.click();
 
-  statusEl.textContent =
+  statusEl.textContent=
     "Polaroid berhasil didownload.";
 
 };
@@ -1682,19 +1562,19 @@ document
 
   }
 
-  statusEl.textContent =
+  statusEl.textContent=
     "Menyiapkan cetakan...";
 
-  const result =
+  const result=
     await buatGambarPolaroid();
 
-  const data =
+  const data=
     result.toDataURL(
       "image/jpeg",
       .95
     );
 
-  const win =
+  const win=
     window.open(
       "",
       "_blank"
@@ -1782,7 +1662,7 @@ document
 
   win.document.close();
 
-  statusEl.textContent =
+  statusEl.textContent=
     "Dialog cetak dibuka.";
 
 };
