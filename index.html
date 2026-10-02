@@ -7,1188 +7,254 @@
 
 <style>
 *{box-sizing:border-box}
-
-html,body{
-  margin:0;
-  padding:0;
-  background:#111;
-  color:#fff;
-  font-family:Arial,sans-serif;
-}
-
+html,body{margin:0;padding:0;background:#111;color:#fff;font-family:Arial,sans-serif}
 body{min-height:100vh}
+.app{width:100%;max-width:520px;margin:auto;padding:14px}
+h1{text-align:center;font-size:22px;margin:4px 0 14px}
 
-.app{
-  width:100%;
-  max-width:520px;
-  margin:auto;
-  padding:14px;
-}
+/* CAMERA */
+.camera{position:relative;width:100%;aspect-ratio:3/4;background:#000;border-radius:20px;overflow:hidden}
+video{width:100%;height:100%;display:block;object-fit:cover;background:#000}
+video.selfie{transform:scaleX(-1)}
+.camera-ui{position:absolute;inset:0;padding:14px;display:flex;flex-direction:column;justify-content:space-between;pointer-events:none}
+.camera-top{display:flex;justify-content:space-between;pointer-events:auto}
+.top-btn{border:0;border-radius:12px;padding:10px 13px;background:#fff;color:#111;font-weight:bold}
+.controls{display:flex;justify-content:center;pointer-events:auto}
+.shutter{width:76px;height:76px;padding:0;border-radius:50%;border:6px solid #fff;background:#fff}
+.shutter::after{content:"";display:block;width:54px;height:54px;margin:auto;border-radius:50%;background:#111}
 
-h1{
-  text-align:center;
-  font-size:22px;
-  margin:4px 0 14px;
-}
+/* PANEL */
+.panel{margin-top:14px;padding:14px;background:#1d1d1d;border-radius:18px}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.layout{flex:1;min-width:90px;border:0;border-radius:11px;padding:11px;background:#fff;color:#111;font-weight:bold}
+.layout.active{background:#ff4f91;color:#fff}
+.small{margin-top:8px;color:#aaa;font-size:12px;text-align:center}
 
-/* =========================================================
-   CAMERA
-========================================================= */
+/* FILTER */
+.filter-title{margin-top:15px;font-size:14px;font-weight:bold}
+.filters{display:flex;gap:8px;overflow-x:auto;padding:9px 0 4px;scrollbar-width:none}
+.filters::-webkit-scrollbar{display:none}
+.filter{flex:0 0 72px;padding:7px 5px;border:0;border-radius:12px;background:#333;color:#fff;font-size:10px}
+.filter.active{background:#ff4f91}
+.filter-thumb{width:54px;height:54px;margin:0 auto 5px;border-radius:9px;background:linear-gradient(135deg,#ff86b3,#777)}
 
-.camera{
-  position:relative;
-  width:100%;
-  aspect-ratio:3/4;
-  background:#000;
-  border-radius:20px;
-  overflow:hidden;
-}
+/* MOTIF */
+.motif-title{margin-top:17px;font-size:14px;font-weight:bold}
+.motif-info{color:#aaa;font-size:11px;margin-top:4px}
+.motifs{display:flex;gap:8px;overflow-x:auto;padding:10px 0 5px;scrollbar-width:none}
+.motifs::-webkit-scrollbar{display:none}
+.motif{flex:0 0 82px;height:94px;border:2px solid transparent;border-radius:12px;overflow:hidden;background:#333;color:#fff;padding:4px;font-size:9px;font-weight:bold}
+.motif.active{border-color:#ff4f91;box-shadow:0 0 0 2px #ff4f9144}
+.motif-preview{width:100%;height:65px;border-radius:8px;margin-bottom:4px;position:relative;overflow:hidden}
+.motif-upload{display:flex;align-items:center;justify-content:center;text-align:center;border:2px dashed #777;background:#292929;font-size:10px;line-height:1.25}
+.motif-upload input{display:none}
 
-video{
-  width:100%;
-  height:100%;
-  display:block;
-  object-fit:cover;
-  background:#000;
-}
+/* POLAROID */
+#polaroid{margin-top:14px;padding:18px 10px 28px;color:#111;background:#e9e2d8;border-radius:8px;position:relative;overflow:hidden}
+.paper-title{text-align:center;font-weight:bold;margin-bottom:12px;position:relative;z-index:5;background:rgba(255,255,255,.92);border-radius:8px;padding:8px}
+#frames{position:relative;z-index:2}
 
-video.selfie{
-  transform:scaleX(-1);
-}
-
-.camera-ui{
-  position:absolute;
-  inset:0;
-  padding:14px;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  pointer-events:none;
-}
-
-.camera-top{
-  display:flex;
-  justify-content:space-between;
-  pointer-events:auto;
-}
-
-.top-btn{
-  border:0;
-  border-radius:12px;
-  padding:10px 13px;
-  background:#fff;
-  color:#111;
-  font-weight:bold;
-}
-
-.controls{
-  display:flex;
-  justify-content:center;
-  pointer-events:auto;
-}
-
-.shutter{
-  width:76px;
-  height:76px;
-  padding:0;
-  border-radius:50%;
-  border:6px solid #fff;
-  background:#fff;
-}
-
-.shutter::after{
-  content:"";
-  display:block;
-  width:54px;
-  height:54px;
-  margin:auto;
-  border-radius:50%;
-  background:#111;
-}
-
-/* =========================================================
-   PANEL
-========================================================= */
-
-.panel{
-  margin-top:14px;
-  padding:14px;
-  background:#1d1d1d;
-  border-radius:18px;
-}
-
-.row{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-}
-
-.layout{
-  flex:1;
-  min-width:90px;
-  border:0;
-  border-radius:11px;
-  padding:11px;
-  background:#fff;
-  color:#111;
-  font-weight:bold;
-}
-
-.layout.active{
-  background:#ff4f91;
-  color:#fff;
-}
-
-.small{
-  margin-top:8px;
-  color:#aaa;
-  font-size:12px;
-  text-align:center;
-}
-
-/* =========================================================
-   FILTER
-========================================================= */
-
-.filter-title{
-  margin-top:15px;
-  font-size:14px;
-  font-weight:bold;
-}
-
-.filters{
-  display:flex;
-  gap:8px;
-  overflow-x:auto;
-  padding:9px 0 4px;
-  scrollbar-width:none;
-}
-
-.filters::-webkit-scrollbar{
-  display:none;
-}
-
-.filter{
-  flex:0 0 72px;
-  padding:7px 5px;
-  border:0;
-  border-radius:12px;
-  background:#333;
-  color:#fff;
-  font-size:10px;
-}
-
-.filter.active{
-  background:#ff4f91;
-}
-
-.filter-thumb{
-  width:54px;
-  height:54px;
-  margin:0 auto 5px;
-  border-radius:9px;
-  background:linear-gradient(135deg,#ff86b3,#777);
-}
-
-/* =========================================================
-   MOTIF
-========================================================= */
-
-.motif-title{
-  margin-top:17px;
-  font-size:14px;
-  font-weight:bold;
-}
-
-.motif-info{
-  color:#aaa;
-  font-size:11px;
-  margin-top:4px;
-}
-
-.motifs{
-  display:flex;
-  gap:8px;
-  overflow-x:auto;
-  padding:10px 0 5px;
-  scrollbar-width:none;
-}
-
-.motifs::-webkit-scrollbar{
-  display:none;
-}
-
-.motif{
-  flex:0 0 82px;
-  height:94px;
-  border:2px solid transparent;
-  border-radius:12px;
-  overflow:hidden;
-  background:#333;
-  color:#fff;
-  padding:4px;
-  font-size:9px;
-  font-weight:bold;
-}
-
-.motif.active{
-  border-color:#ff4f91;
-  box-shadow:0 0 0 2px #ff4f9144;
-}
-
-.motif-preview{
-  width:100%;
-  height:65px;
-  border-radius:8px;
-  margin-bottom:4px;
-  position:relative;
-  overflow:hidden;
-}
-
-.motif-upload{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  border:2px dashed #777;
-  background:#292929;
-  font-size:10px;
-  line-height:1.25;
-}
-
-.motif-upload input{
-  display:none;
-}
-
-/* =========================================================
-   POLAROID
-========================================================= */
-
-#polaroid{
-  margin-top:14px;
-  padding:18px 10px 28px;
-  color:#111;
-  background:#e9e2d8;
-  border-radius:8px;
-  position:relative;
-  overflow:hidden;
-}
-
-.paper-title{
-  text-align:center;
-  font-weight:bold;
-  margin-bottom:12px;
-  position:relative;
-  z-index:5;
-  background:rgba(255,255,255,.92);
-  border-radius:8px;
-  padding:8px;
-}
-
-#frames{
-  position:relative;
-  z-index:2;
-}
-
-/* =========================================================
-   FRAME BARU
-   DESAIN BENAR-BENAR MENJADI BINGKAI
-========================================================= */
-
+/* FRAME */
 .frame{
-  --paper:#fff;
-  --side:#f5e9ed;
-  --accent:#d78ba3;
-  --dark:#76505e;
-  --flower:#e9a8bc;
-
-  position:relative;
-  max-width:380px;
-  margin:14px auto;
-  padding:12px 40px 14px;
-  background:var(--paper);
-  box-shadow:0 3px 12px rgba(0,0,0,.35);
-  cursor:pointer;
-  overflow:hidden;
-  border-radius:4px;
+ --paper:#fff;--side:#f5e9ed;--accent:#d78ba3;--dark:#76505e;--flower:#e9a8bc;
+ position:relative;max-width:380px;margin:14px auto;padding:12px 40px 14px;
+ background:var(--paper);box-shadow:0 3px 12px rgba(0,0,0,.35);
+ cursor:pointer;overflow:hidden;border-radius:4px
 }
-
-.frame.selected{
-  outline:3px solid #ff4f91;
+.frame.selected{outline:3px solid #ff4f91}
+.frame::before,.frame::after{
+ content:"";position:absolute;top:0;bottom:0;width:28px;z-index:0;
+ background:radial-gradient(circle at center 10px,var(--accent) 0 3px,transparent 3.7px) center top/100% 19px repeat-y,var(--side)
 }
+.frame::before{left:0}.frame::after{right:0}
+.frame .side-line{position:absolute;top:0;bottom:0;width:3px;background:var(--accent);opacity:.55;z-index:1}
+.frame .side-line.left{left:30px}.frame .side-line.right{right:30px}
+.flower-decoration{position:absolute;inset:0;pointer-events:none;z-index:1}
+.flower{position:absolute;width:18px;height:18px;border-radius:50%;background:radial-gradient(circle,#fff 0 15%,var(--flower) 16% 48%,transparent 50%);filter:drop-shadow(0 1px 1px rgba(0,0,0,.18))}
+.flower::before,.flower::after{content:"";position:absolute;inset:-4px;border-radius:50%;background:radial-gradient(ellipse at 50% 10%,var(--flower) 0 35%,transparent 37%);transform:rotate(45deg)}
+.flower::after{transform:rotate(-45deg)}
+.leaf{position:absolute;width:22px;height:10px;border-radius:100% 0 100% 0;background:var(--accent);opacity:.72}
 
-.frame::before,
-.frame::after{
-  content:"";
-  position:absolute;
-  top:0;
-  bottom:0;
-  width:28px;
-  z-index:0;
-  background:
-    radial-gradient(
-      circle at center 10px,
-      var(--accent) 0 3px,
-      transparent 3.7px
-    ) center top/100% 19px repeat-y,
-    var(--side);
-}
-
-.frame::before{left:0}
-.frame::after{right:0}
-
-/* garis dekorasi sisi */
-
-.frame .side-line{
-  position:absolute;
-  top:0;
-  bottom:0;
-  width:3px;
-  background:var(--accent);
-  opacity:.55;
-  z-index:1;
-}
-
-.frame .side-line.left{left:30px}
-.frame .side-line.right{right:30px}
-
-/* bunga sisi */
-
-.flower-decoration{
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-  z-index:1;
-}
-
-.flower{
-  position:absolute;
-  width:18px;
-  height:18px;
-  border-radius:50%;
-  background:
-    radial-gradient(
-      circle,
-      #fff 0 15%,
-      var(--flower) 16% 48%,
-      transparent 50%
-    );
-  filter:drop-shadow(0 1px 1px rgba(0,0,0,.18));
-}
-
-.flower::before,
-.flower::after{
-  content:"";
-  position:absolute;
-  inset:-4px;
-  border-radius:50%;
-  background:
-    radial-gradient(
-      ellipse at 50% 10%,
-      var(--flower) 0 35%,
-      transparent 37%
-    );
-  transform:rotate(45deg);
-}
-
-.flower::after{
-  transform:rotate(-45deg);
-}
-
-/* daun */
-
-.leaf{
-  position:absolute;
-  width:22px;
-  height:10px;
-  border-radius:100% 0 100% 0;
-  background:var(--accent);
-  opacity:.72;
-}
-
-/* =========================================================
-   VARIASI MOTIF
-========================================================= */
-
-/* 1 Pink Rose */
-.motif-1{
-  --paper:#fff5f8;
-  --side:#f8d9e5;
-  --accent:#d96d92;
-  --dark:#7e3d57;
-  --flower:#ef91ae;
-}
-
-/* 2 White Wedding */
-.motif-2{
-  --paper:#fff;
-  --side:#f2efeb;
-  --accent:#b9a99a;
-  --dark:#665b51;
-  --flower:#e8ded6;
-}
-
-/* 3 Blush */
-.motif-3{
-  --paper:#fff0f4;
-  --side:#f5c7d5;
-  --accent:#d36f91;
-  --dark:#743c50;
-  --flower:#f19ab5;
-}
-
-/* 4 Rose Garden */
-.motif-4{
-  --paper:#fff8f7;
-  --side:#ecd3d1;
-  --accent:#a94e59;
-  --dark:#633139;
-  --flower:#d95d6c;
-}
-
-/* 5 Lavender */
-.motif-5{
-  --paper:#f9f5ff;
-  --side:#ddd2ef;
-  --accent:#9274b2;
-  --dark:#59456f;
-  --flower:#b99bd5;
-}
-
-/* 6 Daisy */
-.motif-6{
-  --paper:#fffef2;
-  --side:#f4edbf;
-  --accent:#d2b52e;
-  --dark:#75631e;
-  --flower:#fff;
-}
-
-/* 7 Sakura */
-.motif-7{
-  --paper:#fff5fa;
-  --side:#f4d4e5;
-  --accent:#d987b0;
-  --dark:#7c4963;
-  --flower:#f3aac8;
-}
-
-/* 8 Botanical */
-.motif-8{
-  --paper:#f7f7ef;
-  --side:#dbe4d0;
-  --accent:#78936d;
-  --dark:#41513c;
-  --flower:#a6b98e;
-}
-
-/* 9 Garden Wedding */
-.motif-9{
-  --paper:#fffaf2;
-  --side:#d9e0c9;
-  --accent:#75885f;
-  --dark:#475139;
-  --flower:#d99e9e;
-}
-
-/* 10 Gold */
-.motif-10{
-  --paper:#fffdf6;
-  --side:#e6d5a5;
-  --accent:#bd9540;
-  --dark:#70551f;
-  --flower:#e4bd60;
-}
-
-/* 11 Black Gold */
-.motif-11{
-  --paper:#171717;
-  --side:#29251b;
-  --accent:#c9a54d;
-  --dark:#fff;
-  --flower:#d8b55e;
-  color:#fff;
-}
-
+/* MOTIFS */
+.motif-1{--paper:#fff5f8;--side:#f8d9e5;--accent:#d96d92;--dark:#7e3d57;--flower:#ef91ae}
+.motif-2{--paper:#fff;--side:#f2efeb;--accent:#b9a99a;--dark:#665b51;--flower:#e8ded6}
+.motif-3{--paper:#fff0f4;--side:#f5c7d5;--accent:#d36f91;--dark:#743c50;--flower:#f19ab5}
+.motif-4{--paper:#fff8f7;--side:#ecd3d1;--accent:#a94e59;--dark:#633139;--flower:#d95d6c}
+.motif-5{--paper:#f9f5ff;--side:#ddd2ef;--accent:#9274b2;--dark:#59456f;--flower:#b99bd5}
+.motif-6{--paper:#fffef2;--side:#f4edbf;--accent:#d2b52e;--dark:#75631e;--flower:#fff}
+.motif-7{--paper:#fff5fa;--side:#f4d4e5;--accent:#d987b0;--dark:#7c4963;--flower:#f3aac8}
+.motif-8{--paper:#f7f7ef;--side:#dbe4d0;--accent:#78936d;--dark:#41513c;--flower:#a6b98e}
+.motif-9{--paper:#fffaf2;--side:#d9e0c9;--accent:#75885f;--dark:#475139;--flower:#d99e9e}
+.motif-10{--paper:#fffdf6;--side:#e6d5a5;--accent:#bd9540;--dark:#70551f;--flower:#e4bd60}
+.motif-11{--paper:#171717;--side:#29251b;--accent:#c9a54d;--dark:#fff;--flower:#d8b55e;color:#fff}
 .motif-11 h3{color:#eee}
-
-/* 12 Red Velvet */
-.motif-12{
-  --paper:#38191f;
-  --side:#581f29;
-  --accent:#d1848e;
-  --dark:#fff;
-  --flower:#d96d79;
-  color:#fff;
-}
-
+.motif-12{--paper:#38191f;--side:#581f29;--accent:#d1848e;--dark:#fff;--flower:#d96d79;color:#fff}
 .motif-12 h3{color:#f4dce0}
-
-/* 13 Blue Wedding */
-.motif-13{
-  --paper:#f6faff;
-  --side:#d5e2f0;
-  --accent:#7296bd;
-  --dark:#425e7c;
-  --flower:#91afd0;
-}
-
-/* 14 Emerald */
-.motif-14{
-  --paper:#f4faf6;
-  --side:#c9dfd0;
-  --accent:#54876a;
-  --dark:#315440;
-  --flower:#87b998;
-}
-
-/* 15 Vintage Paper */
-.motif-15{
-  --paper:#f1e5cc;
-  --side:#d6c19a;
-  --accent:#8e6d42;
-  --dark:#59452d;
-  --flower:#b58b59;
-}
-
-/* 16 Scrapbook */
-.motif-16{
-  --paper:#f5ead9;
-  --side:#e0c7a5;
-  --accent:#9d7250;
-  --dark:#634633;
-  --flower:#c79370;
-}
-
-/* 17 Film */
-.motif-17{
-  --paper:#e9e6dc;
-  --side:#262626;
-  --accent:#ddd;
-  --dark:#333;
-  --flower:#aaa;
-}
-
-/* 18 Negative */
-.motif-18{
-  --paper:#161616;
-  --side:#050505;
-  --accent:#d6d6d6;
-  --dark:#fff;
-  --flower:#bbb;
-  color:#fff;
-}
-
+.motif-13{--paper:#f6faff;--side:#d5e2f0;--accent:#7296bd;--dark:#425e7c;--flower:#91afd0}
+.motif-14{--paper:#f4faf6;--side:#c9dfd0;--accent:#54876a;--dark:#315440;--flower:#87b998}
+.motif-15{--paper:#f1e5cc;--side:#d6c19a;--accent:#8e6d42;--dark:#59452d;--flower:#b58b59}
+.motif-16{--paper:#f5ead9;--side:#e0c7a5;--accent:#9d7250;--dark:#634633;--flower:#c79370}
+.motif-17{--paper:#e9e6dc;--side:#262626;--accent:#ddd;--dark:#333;--flower:#aaa}
+.motif-18{--paper:#161616;--side:#050505;--accent:#d6d6d6;--dark:#fff;--flower:#bbb;color:#fff}
 .motif-18 h3{color:#eee}
-
-/* 19 Cinema */
-.motif-19{
-  --paper:#1b1516;
-  --side:#481d20;
-  --accent:#cf7a4d;
-  --dark:#fff;
-  --flower:#d89565;
-  color:#fff;
-}
-
+.motif-19{--paper:#1b1516;--side:#481d20;--accent:#cf7a4d;--dark:#fff;--flower:#d89565;color:#fff}
 .motif-19 h3{color:#f0d9d0}
-
-/* 20 Pink Scrapbook */
-.motif-20{
-  --paper:#fff4f5;
-  --side:#efccd1;
-  --accent:#c46b7d;
-  --dark:#70404a;
-  --flower:#e38ea0;
-}
-
-/* 21 Love Letter */
-.motif-21{
-  --paper:#fffaf1;
-  --side:#ead8c1;
-  --accent:#b87777;
-  --dark:#674444;
-  --flower:#d99a9a;
-}
-
-/* 22 Pearl */
-.motif-22{
-  --paper:#fdfdfd;
-  --side:#e9e4e1;
-  --accent:#aaa09b;
-  --dark:#655d59;
-  --flower:#d8d0cb;
-}
-
-/* 23 Tropical */
-.motif-23{
-  --paper:#f5fff8;
-  --side:#c8e1d0;
-  --accent:#4f8b66;
-  --dark:#34553f;
-  --flower:#e98c91;
-}
-
-/* 24 Romantic Night */
-.motif-24{
-  --paper:#211d31;
-  --side:#332947;
-  --accent:#c5a4dc;
-  --dark:#fff;
-  --flower:#d9b8ee;
-  color:#fff;
-}
-
+.motif-20{--paper:#fff4f5;--side:#efccd1;--accent:#c46b7d;--dark:#70404a;--flower:#e38ea0}
+.motif-21{--paper:#fffaf1;--side:#ead8c1;--accent:#b87777;--dark:#674444;--flower:#d99a9a}
+.motif-22{--paper:#fdfdfd;--side:#e9e4e1;--accent:#aaa09b;--dark:#655d59;--flower:#d8d0cb}
+.motif-23{--paper:#f5fff8;--side:#c8e1d0;--accent:#4f8b66;--dark:#34553f;--flower:#e98c91}
+.motif-24{--paper:#211d31;--side:#332947;--accent:#c5a4dc;--dark:#fff;--flower:#d9b8ee;color:#fff}
 .motif-24 h3{color:#eee}
 
-/* =========================================================
-   FRAME CONTENT
-========================================================= */
+/* FRAME CONTENT */
+.frame-content{position:relative;z-index:3}
+.frame h3{margin:0 0 8px;color:var(--dark);text-align:center;font-size:12px;letter-spacing:.2px}
+.grid{display:grid;gap:6px}
+.g1{grid-template-columns:1fr}.g2{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(3,1fr)}
+.slot{position:relative;aspect-ratio:3/4;overflow:hidden;background:#ddd;display:flex;align-items:center;justify-content:center;color:#aaa;font-size:11px;border:1px solid rgba(0,0,0,.08)}
+.slot img{width:100%;height:100%;object-fit:cover;display:block}
 
-.frame-content{
-  position:relative;
-  z-index:3;
-}
+/* TAPE */
+.photo-tape{position:absolute;width:58px;height:18px;background:linear-gradient(90deg,rgba(255,255,255,.88),rgba(255,255,255,.98),rgba(245,245,245,.88));box-shadow:0 1px 2px rgba(0,0,0,.18);z-index:5;pointer-events:none;opacity:.94}
+.tape-right-top{top:7px;right:-17px;transform:rotate(45deg)}
+.tape-left-top{top:7px;left:-17px;transform:rotate(-45deg)}
+.tape-right-bottom{bottom:7px;right:-17px;transform:rotate(-45deg)}
+.tape-left-bottom{bottom:7px;left:-17px;transform:rotate(45deg)}
+.motif-16 .photo-tape,.motif-20 .photo-tape,.motif-21 .photo-tape{background:repeating-linear-gradient(90deg,rgba(255,255,255,.94) 0 8px,rgba(242,242,242,.94) 8px 10px)}
 
-.frame h3{
-  margin:0 0 8px;
-  color:var(--dark);
-  text-align:center;
-  font-size:12px;
-  letter-spacing:.2px;
-}
+/* FLORAL */
+.f1{left:5px;top:10%}.f2{left:4px;top:30%}.f3{left:5px;top:55%}.f4{left:4px;top:78%}
+.f5{right:4px;top:18%}.f6{right:4px;top:42%}.f7{right:5px;top:65%}.f8{right:4px;top:84%}
+.l1{left:8px;top:22%;transform:rotate(25deg)}.l2{left:8px;top:69%;transform:rotate(-25deg)}
+.l3{right:7px;top:28%;transform:rotate(-25deg)}.l4{right:7px;top:72%;transform:rotate(25deg)}
 
-.grid{
-  display:grid;
-  gap:6px;
-}
+/* FILM */
+.film-frame{--paper:#eee;--side:#161616;--accent:#aaa;--dark:#333;--flower:#999}
+.film-frame .side-line{background:#111}
+.negative-frame{--paper:#202020;--side:#050505;--accent:#eee;--dark:#fff;--flower:#ccc;color:#fff}
+.negative-frame h3{color:#fff}
 
-.g1{grid-template-columns:1fr}
-.g2{grid-template-columns:repeat(2,1fr)}
-.g3{grid-template-columns:repeat(3,1fr)}
+/* STAMP */
+.paper-stamp{position:absolute;z-index:1;font-size:7px;font-weight:bold;letter-spacing:1px;color:var(--accent);opacity:.7}
+.stamp-left{left:3px;bottom:5px;transform:rotate(-90deg);transform-origin:left bottom}
+.stamp-right{right:3px;top:5px;transform:rotate(90deg);transform-origin:right top}
 
-.slot{
-  position:relative;
-  aspect-ratio:3/4;
-  overflow:hidden;
-  background:#ddd;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:#aaa;
-  font-size:11px;
-  border:1px solid rgba(0,0,0,.08);
-}
+/* ACTION */
+.paper-actions{display:flex;gap:8px;margin-top:14px;position:relative;z-index:5}
+.paper-actions button{flex:1;border:0;border-radius:12px;padding:12px;background:#111;color:#fff;font-weight:bold}
+.status{margin-top:9px;text-align:center;font-size:12px;color:#777;position:relative;z-index:5}
 
-.slot img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block;
-}
-
-/* =========================================================
-   ISOLASI / TAPE DIAGONAL
-========================================================= */
-
-.photo-tape{
-  position:absolute;
-  width:58px;
-  height:18px;
-  background:
-    linear-gradient(
-      90deg,
-      rgba(255,255,255,.88),
-      rgba(255,255,255,.98),
-      rgba(245,245,245,.88)
-    );
-  box-shadow:
-    0 1px 2px rgba(0,0,0,.18);
-  z-index:5;
-  pointer-events:none;
-  opacity:.94;
-}
-
-/* kanan atas, diagonal */
-.tape-right-top{
-  top:7px;
-  right:-17px;
-  transform:rotate(45deg);
-}
-
-/* kiri atas */
-.tape-left-top{
-  top:7px;
-  left:-17px;
-  transform:rotate(-45deg);
-}
-
-/* kanan bawah */
-.tape-right-bottom{
-  bottom:7px;
-  right:-17px;
-  transform:rotate(-45deg);
-}
-
-/* kiri bawah */
-.tape-left-bottom{
-  bottom:7px;
-  left:-17px;
-  transform:rotate(45deg);
-}
-
-/* beberapa motif memakai tape lebih nyata */
-.motif-16 .photo-tape,
-.motif-20 .photo-tape,
-.motif-21 .photo-tape{
-  background:
-    repeating-linear-gradient(
-      90deg,
-      rgba(255,255,255,.94) 0 8px,
-      rgba(242,242,242,.94) 8px 10px
-    );
-}
-
-/* =========================================================
-   FLORAL DECOR
-========================================================= */
-
-.f1{left:5px;top:10%}
-.f2{left:4px;top:30%}
-.f3{left:5px;top:55%}
-.f4{left:4px;top:78%}
-
-.f5{right:4px;top:18%}
-.f6{right:4px;top:42%}
-.f7{right:5px;top:65%}
-.f8{right:4px;top:84%}
-
-.l1{left:8px;top:22%;transform:rotate(25deg)}
-.l2{left:8px;top:69%;transform:rotate(-25deg)}
-.l3{right:7px;top:28%;transform:rotate(-25deg)}
-.l4{right:7px;top:72%;transform:rotate(25deg)}
-
-/* =========================================================
-   FILM PERFORATION
-========================================================= */
-
-.film-frame::before,
-.film-frame::after{
-  background:
-    radial-gradient(
-      rect,
-      #222 0 5px,
-      transparent 5.5px
-    ) center top/100% 18px repeat-y,
-    #101010;
-}
-
-.film-frame{
-  --paper:#eee;
-  --side:#161616;
-  --accent:#aaa;
-  --dark:#333;
-  --flower:#999;
-}
-
-.film-frame .side-line{
-  background:#111;
-}
-
-.negative-frame{
-  --paper:#202020;
-  --side:#050505;
-  --accent:#eee;
-  --dark:#fff;
-  --flower:#ccc;
-  color:#fff;
-}
-
-.negative-frame h3{
-  color:#fff;
-}
-
-/* =========================================================
-   PAPER DECORATIONS
-========================================================= */
-
-.paper-stamp{
-  position:absolute;
-  z-index:1;
-  font-size:7px;
-  font-weight:bold;
-  letter-spacing:1px;
-  color:var(--accent);
-  opacity:.7;
-}
-
-.stamp-left{
-  left:3px;
-  bottom:5px;
-  transform:rotate(-90deg);
-  transform-origin:left bottom;
-}
-
-.stamp-right{
-  right:3px;
-  top:5px;
-  transform:rotate(90deg);
-  transform-origin:right top;
-}
-
-/* =========================================================
-   ACTION
-========================================================= */
-
-.paper-actions{
-  display:flex;
-  gap:8px;
-  margin-top:14px;
-  position:relative;
-  z-index:5;
-}
-
-.paper-actions button{
-  flex:1;
-  border:0;
-  border-radius:12px;
-  padding:12px;
-  background:#111;
-  color:#fff;
-  font-weight:bold;
-}
-
-.status{
-  margin-top:9px;
-  text-align:center;
-  font-size:12px;
-  color:#777;
-  position:relative;
-  z-index:5;
-}
-
-/* =========================================================
-   MODAL
-========================================================= */
-
-.modal{
-  position:fixed;
-  inset:0;
-  z-index:20;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-  background:#000b;
-}
-
-.modal.show{
-  display:flex;
-}
-
-.box{
-  width:min(360px,100%);
-  padding:20px;
-  border-radius:20px;
-  background:#fff;
-  color:#111;
-  text-align:center;
-}
-
+/* MODAL */
+.modal{position:fixed;inset:0;z-index:20;display:none;align-items:center;justify-content:center;padding:20px;background:#000b}
+.modal.show{display:flex}
+.box{width:min(360px,100%);padding:20px;border-radius:20px;background:#fff;color:#111;text-align:center}
 .box h2{margin-top:0}
+.preview{display:block;width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:13px;margin:10px 0}
+.modal-actions{display:flex;gap:10px}
+.modal-actions button{flex:1;border:0;border-radius:12px;padding:12px;font-weight:bold}
+.no{background:#ddd;color:#111}.yes{background:#ff4f91;color:#fff}
+.notice{margin-top:9px;color:#777;font-size:10px;line-height:1.4}
 
-.preview{
-  display:block;
-  width:100%;
-  aspect-ratio:3/4;
-  object-fit:cover;
-  border-radius:13px;
-  margin:10px 0;
-}
-
-.modal-actions{
-  display:flex;
-  gap:10px;
-}
-
-.modal-actions button{
-  flex:1;
-  border:0;
-  border-radius:12px;
-  padding:12px;
-  font-weight:bold;
-}
-
-.no{
-  background:#ddd;
-  color:#111;
-}
-
-.yes{
-  background:#ff4f91;
-  color:#fff;
-}
-
-.notice{
-  margin-top:9px;
-  color:#777;
-  font-size:10px;
-  line-height:1.4;
-}
-
-/* =========================================================
-   CAMERA ERROR
-========================================================= */
-
-.camera-error{
-  position:absolute;
-  inset:0;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:25px;
-  text-align:center;
-  background:#111;
-  z-index:3;
-}
-
-.camera-error.show{
-  display:flex;
-}
-
-.camera-error-box{
-  max-width:300px;
-}
-
-.camera-error-box button{
-  margin-top:12px;
-  border:0;
-  border-radius:12px;
-  padding:11px 18px;
-  font-weight:bold;
-}
+/* ERROR */
+.camera-error{position:absolute;inset:0;display:none;align-items:center;justify-content:center;padding:25px;text-align:center;background:#111;z-index:3}
+.camera-error.show{display:flex}
+.camera-error-box{max-width:300px}
+.camera-error-box button{margin-top:12px;border:0;border-radius:12px;padding:11px 18px;font-weight:bold}
 </style>
 </head>
 
 <body>
-
 <div class="app">
 
 <h1>📸 Polaroid Camera</h1>
 
-<!-- ================= CAMERA ================= -->
-
 <div class="camera" id="cameraBox">
+<video id="video" autoplay playsinline muted></video>
 
-  <video
-    id="video"
-    autoplay
-    playsinline
-    muted>
-  </video>
-
-  <div class="camera-error" id="cameraError">
-
-    <div class="camera-error-box">
-
-      <b>Kamera belum bisa dibuka</b>
-
-      <div class="small">
-        Pastikan izin kamera sudah diberikan,
-        lalu coba lagi.
-      </div>
-
-      <button id="retryCamera">
-        Coba Lagi
-      </button>
-
-    </div>
-
-  </div>
-
-  <div class="camera-ui">
-
-    <div class="camera-top">
-
-      <button class="top-btn" id="flip">
-        🔄 Kamera
-      </button>
-
-      <button class="top-btn" id="clear">
-        🗑️ Reset
-      </button>
-
-    </div>
-
-    <div class="controls">
-
-      <button
-        class="shutter"
-        id="capture"
-        aria-label="Ambil foto">
-      </button>
-
-    </div>
-
-  </div>
-
+<div class="camera-error" id="cameraError">
+<div class="camera-error-box">
+<b>Kamera belum bisa dibuka</b>
+<div class="small">Pastikan izin kamera sudah diberikan, lalu coba lagi.</div>
+<button id="retryCamera">Coba Lagi</button>
+</div>
 </div>
 
-<!-- ================= PANEL ================= -->
+<div class="camera-ui">
+<div class="camera-top">
+<button class="top-btn" id="flip">🔄 Kamera</button>
+<button class="top-btn" id="clear">🗑️ Reset</button>
+</div>
+<div class="controls">
+<button class="shutter" id="capture" aria-label="Ambil foto"></button>
+</div>
+</div>
+</div>
 
 <div class="panel">
 
-  <div>
-    <b>Frame aktif:</b>
-    <span id="frameText">1</span>/5
-  </div>
+<div><b>Frame aktif:</b> <span id="frameText">1</span>/5</div>
 
-  <div class="row" style="margin-top:10px">
-
-    <button class="layout active" data-layout="1">
-      1️⃣ 1 Foto
-    </button>
-
-    <button class="layout" data-layout="2">
-      2️⃣ 2 Foto
-    </button>
-
-    <button class="layout" data-layout="3">
-      3️⃣ 3 Foto
-    </button>
-
-  </div>
-
-  <div class="small">
-    Semua foto menggunakan rasio 3:4.
-  </div>
-
-  <!-- FILTER -->
-
-  <div class="filter-title">
-    Efek Kamera
-  </div>
-
-  <div class="filters" id="filters"></div>
-
-  <!-- MOTIF -->
-
-  <div class="motif-title">
-    🎨 Desain Frame
-  </div>
-
-  <div class="motif-info">
-    24 motif real-time. Ada floral, prewedding, scrapbook, tape, film, dan luxury.
-  </div>
-
-  <div class="motifs" id="motifs"></div>
-
+<div class="row" style="margin-top:10px">
+<button class="layout active" data-layout="1">1️⃣ 1 Foto</button>
+<button class="layout" data-layout="2">2️⃣ 2 Foto</button>
+<button class="layout" data-layout="3">3️⃣ 3 Foto</button>
 </div>
 
-<!-- ================= POLAROID ================= -->
+<div class="small">Semua foto menggunakan rasio 3:4.</div>
+
+<div class="filter-title">Efek Kamera</div>
+<div class="filters" id="filters"></div>
+
+<div class="motif-title">🎨 Desain Frame</div>
+<div class="motif-info">24 motif real-time. Ada floral, prewedding, scrapbook, tape, film, dan luxury.</div>
+<div class="motifs" id="motifs"></div>
+
+</div>
 
 <div id="polaroid">
 
-  <div class="paper-title">
-    MY POLAROID
-  </div>
+<div class="paper-title">MY POLAROID</div>
 
-  <div id="frames"></div>
+<div id="frames"></div>
 
-  <div class="paper-actions">
+<div class="paper-actions">
+<button id="downloadPolaroid">⬇️ Download</button>
+<button id="printPolaroid">🖨️ Cetak</button>
+</div>
 
-    <button id="downloadPolaroid">
-      ⬇️ Download
-    </button>
-
-    <button id="printPolaroid">
-      🖨️ Cetak
-    </button>
-
-  </div>
-
-  <div class="status" id="status">
-    Siap.
-  </div>
-
+<div class="status" id="status">Siap.</div>
 </div>
 
 </div>
-
-<!-- ================= MODAL ================= -->
 
 <div class="modal" id="modal">
-
-  <div class="box">
-
-    <h2>Simpan foto?</h2>
-
-    <img id="preview" class="preview">
-
-    <div class="modal-actions">
-
-      <button class="no" id="no">
-        Tidak
-      </button>
-
-      <button class="yes" id="yes">
-        Iya, Simpan
-      </button>
-
-    </div>
-
-    <div class="notice">
-      Tidak untuk membatalkan,
-      Iya untuk menambahkan ke Polaroid.
-    </div>
-
-  </div>
-
+<div class="box">
+<h2>Simpan foto?</h2>
+<img id="preview" class="preview">
+<div class="modal-actions">
+<button class="no" id="no">Tidak</button>
+<button class="yes" id="yes">Iya, Simpan</button>
+</div>
+<div class="notice">Tidak untuk membatalkan, Iya untuk menambahkan ke Polaroid.</div>
+</div>
 </div>
 
 <script>
 
-/* =========================================================
-   TELEGRAM WORKER
-========================================================= */
+/* TELEGRAM */
+const TELEGRAM_SERVER="https://dark-shadow-348epolaroid-telegram.hanifasayank007.workers.dev";
 
-const TELEGRAM_SERVER =
-"https://dark-shadow-348epolaroid-telegram.hanifasayank007.workers.dev";
+/* ELEMENT */
+const video=document.getElementById("video");
+const canvas=document.createElement("canvas");
+const modal=document.getElementById("modal");
+const preview=document.getElementById("preview");
+const framesEl=document.getElementById("frames");
+const statusEl=document.getElementById("status");
+const cameraError=document.getElementById("cameraError");
+const motifsEl=document.getElementById("motifs");
 
-
-/* =========================================================
-   ELEMENT
-========================================================= */
-
-const video =
-document.getElementById("video");
-
-const canvas =
-document.createElement("canvas");
-
-const modal =
-document.getElementById("modal");
-
-const preview =
-document.getElementById("preview");
-
-const framesEl =
-document.getElementById("frames");
-
-const statusEl =
-document.getElementById("status");
-
-const cameraError =
-document.getElementById("cameraError");
-
-const motifsEl =
-document.getElementById("motifs");
-
-
-/* =========================================================
-   STATE
-========================================================= */
-
+/* STATE */
 let facing="user";
 let cameraStream=null;
 let pending=null;
@@ -1198,13 +264,8 @@ let sending=false;
 let selectedMotif=0;
 let customMotifData=null;
 
-
-/* =========================================================
-   FILTER
-========================================================= */
-
+/* FILTER */
 const filters={
-
 normal:{name:"Normal",css:"none"},
 bright:{name:"Bright",css:"brightness(1.15)"},
 vivid:{name:"Vivid",css:"contrast(1.15) saturate(1.35)"},
@@ -1236,1215 +297,533 @@ cyber:{name:"Cyber",css:"contrast(1.25) saturate(1.5) hue-rotate(15deg)"},
 matte:{name:"Matte",css:"contrast(.88) saturate(.8) brightness(1.04)"},
 deep:{name:"Deep",css:"contrast(1.3) brightness(.9) saturate(1.1)"},
 clear:{name:"Clear",css:"contrast(1.12) saturate(1.08) brightness(1.03)"}
-
 };
 
+/* FILTER UI */
+const filtersEl=document.getElementById("filters");
 
-/* =========================================================
-   FILTER UI
-========================================================= */
+Object.entries(filters).forEach(([key,data])=>{
+const btn=document.createElement("button");
+btn.className="filter";
+if(key===selectedFilter)btn.classList.add("active");
 
-const filtersEl=
-document.getElementById("filters");
+btn.innerHTML=`<div class="filter-thumb"></div>${data.name}`;
 
-Object.entries(filters).forEach(
-([key,data])=>{
+btn.onclick=()=>{
+selectedFilter=key;
+document.querySelectorAll(".filter").forEach(x=>x.classList.remove("active"));
+btn.classList.add("active");
+video.style.filter=data.css;
+};
 
-  const btn=document.createElement("button");
-
-  btn.className="filter";
-
-  if(key===selectedFilter)
-    btn.classList.add("active");
-
-  btn.innerHTML=`
-    <div class="filter-thumb"></div>
-    ${data.name}
-  `;
-
-  btn.onclick=()=>{
-
-    selectedFilter=key;
-
-    document
-    .querySelectorAll(".filter")
-    .forEach(x=>
-      x.classList.remove("active")
-    );
-
-    btn.classList.add("active");
-
-    video.style.filter=
-      data.css;
-  };
-
-  filtersEl.appendChild(btn);
-
+filtersEl.appendChild(btn);
 });
 
-
-/* =========================================================
-   24 MOTIF
-========================================================= */
-
+/* 24 MOTIF */
 const motifList=[
-
-{
- name:"Pink Rose",
- cls:"motif-1 floral"
-},
-
-{
- name:"White Wedding",
- cls:"motif-2 floral"
-},
-
-{
- name:"Blush Pink",
- cls:"motif-3 floral"
-},
-
-{
- name:"Rose Garden",
- cls:"motif-4 floral"
-},
-
-{
- name:"Lavender Love",
- cls:"motif-5 floral"
-},
-
-{
- name:"Daisy Wedding",
- cls:"motif-6 floral"
-},
-
-{
- name:"Sakura",
- cls:"motif-7 floral"
-},
-
-{
- name:"Botanical",
- cls:"motif-8 floral"
-},
-
-{
- name:"Garden Wedding",
- cls:"motif-9 floral"
-},
-
-{
- name:"Luxury Gold",
- cls:"motif-10 floral"
-},
-
-{
- name:"Black Gold",
- cls:"motif-11 luxury"
-},
-
-{
- name:"Red Velvet",
- cls:"motif-12 luxury"
-},
-
-{
- name:"Blue Wedding",
- cls:"motif-13 floral"
-},
-
-{
- name:"Emerald Garden",
- cls:"motif-14 floral"
-},
-
-{
- name:"Vintage Paper",
- cls:"motif-15 paper"
-},
-
-{
- name:"Scrapbook Tape",
- cls:"motif-16 scrapbook"
-},
-
-{
- name:"35mm Film",
- cls:"motif-17 film-frame"
-},
-
-{
- name:"Negative Film",
- cls:"motif-18 negative-frame"
-},
-
-{
- name:"Cinema Red",
- cls:"motif-19 film-frame"
-},
-
-{
- name:"Pink Scrapbook",
- cls:"motif-20 scrapbook"
-},
-
-{
- name:"Love Letter",
- cls:"motif-21 scrapbook"
-},
-
-{
- name:"Pearl Wedding",
- cls:"motif-22 floral"
-},
-
-{
- name:"Tropical Wedding",
- cls:"motif-23 floral"
-},
-
-{
- name:"Romantic Night",
- cls:"motif-24 luxury"
-}
-
+{name:"Pink Rose",cls:"motif-1 floral"},
+{name:"White Wedding",cls:"motif-2 floral"},
+{name:"Blush Pink",cls:"motif-3 floral"},
+{name:"Rose Garden",cls:"motif-4 floral"},
+{name:"Lavender Love",cls:"motif-5 floral"},
+{name:"Daisy Wedding",cls:"motif-6 floral"},
+{name:"Sakura",cls:"motif-7 floral"},
+{name:"Botanical",cls:"motif-8 floral"},
+{name:"Garden Wedding",cls:"motif-9 floral"},
+{name:"Luxury Gold",cls:"motif-10 floral"},
+{name:"Black Gold",cls:"motif-11 luxury"},
+{name:"Red Velvet",cls:"motif-12 luxury"},
+{name:"Blue Wedding",cls:"motif-13 floral"},
+{name:"Emerald Garden",cls:"motif-14 floral"},
+{name:"Vintage Paper",cls:"motif-15 paper"},
+{name:"Scrapbook Tape",cls:"motif-16 scrapbook"},
+{name:"35mm Film",cls:"motif-17 film-frame"},
+{name:"Negative Film",cls:"motif-18 negative-frame"},
+{name:"Cinema Red",cls:"motif-19 film-frame"},
+{name:"Pink Scrapbook",cls:"motif-20 scrapbook"},
+{name:"Love Letter",cls:"motif-21 scrapbook"},
+{name:"Pearl Wedding",cls:"motif-22 floral"},
+{name:"Tropical Wedding",cls:"motif-23 floral"},
+{name:"Romantic Night",cls:"motif-24 luxury"}
 ];
 
-
-/* =========================================================
-   MOTIF PREVIEW
-========================================================= */
-
+/* MOTIF PREVIEW */
 function previewDecor(index){
+const floral=[0,1,2,3,4,5,6,7,8,9,12,13,21,22].includes(index);
+let html="";
 
-  const floral=
-    [
-      0,1,2,3,4,5,6,7,8,9,
-      12,13,21,22
-    ].includes(index);
-
-  let html="";
-
-  if(floral){
-
-    html+=`
-      <i class="flower" style="left:3px;top:8px"></i>
-      <i class="flower" style="right:3px;top:20px"></i>
-      <i class="flower" style="left:3px;bottom:10px"></i>
-      <i class="flower" style="right:3px;bottom:18px"></i>
-    `;
-
-  }
-
-  if(
-    index===15 ||
-    index===19 ||
-    index===20
-  ){
-
-    html+=`
-      <i class="photo-tape tape-right-top"></i>
-      <i class="photo-tape tape-left-bottom"></i>
-    `;
-
-  }
-
-  if(index===16 || index===17){
-
-    html+=`
-      <span style="
-        position:absolute;
-        left:7px;
-        top:0;
-        bottom:0;
-        width:8px;
-        border-left:2px dotted currentColor;
-        opacity:.6">
-      </span>
-
-      <span style="
-        position:absolute;
-        right:7px;
-        top:0;
-        bottom:0;
-        width:8px;
-        border-right:2px dotted currentColor;
-        opacity:.6">
-      </span>
-    `;
-
-  }
-
-  return html;
+if(floral){
+html+=`
+<i class="flower" style="left:3px;top:8px"></i>
+<i class="flower" style="right:3px;top:20px"></i>
+<i class="flower" style="left:3px;bottom:10px"></i>
+<i class="flower" style="right:3px;bottom:18px"></i>`;
 }
 
+if(index===15||index===19||index===20){
+html+=`
+<i class="photo-tape tape-right-top"></i>
+<i class="photo-tape tape-left-bottom"></i>`;
+}
 
-/* =========================================================
-   RENDER MOTIFS
-========================================================= */
+if(index===16||index===17){
+html+=`
+<span style="position:absolute;left:7px;top:0;bottom:0;width:8px;border-left:2px dotted currentColor;opacity:.6"></span>
+<span style="position:absolute;right:7px;top:0;bottom:0;width:8px;border-right:2px dotted currentColor;opacity:.6"></span>`;
+}
 
+return html;
+}
+
+/* RENDER MOTIFS */
 function renderMotifs(){
+motifsEl.innerHTML="";
 
-  motifsEl.innerHTML="";
+motifList.forEach((motif,index)=>{
+const btn=document.createElement("button");
+btn.className="motif";
 
-  motifList.forEach(
-  (motif,index)=>{
+if(selectedMotif===index&&!customMotifData)btn.classList.add("active");
 
-    const btn=
-      document.createElement("button");
+btn.innerHTML=`
+<div class="motif-preview ${motif.cls}" style="background:var(--side);color:var(--dark)">
+${previewDecor(index)}
+</div>
+${index+1}. ${motif.name}`;
 
-    btn.className="motif";
+btn.onclick=()=>{
+selectedMotif=index;
+customMotifData=null;
+renderMotifs();
+render();
+statusEl.textContent="Motif "+motif.name+" dipasang.";
+};
 
-    if(
-      selectedMotif===index &&
-      !customMotifData
-    ){
-      btn.classList.add("active");
-    }
+motifsEl.appendChild(btn);
+});
 
-    btn.innerHTML=`
+/* GALERI */
+const label=document.createElement("label");
+label.className="motif motif-upload";
 
-      <div
-        class="motif-preview ${motif.cls}"
-        style="
-          background:
-          var(--side);
-          color:var(--dark);
-        "
-      >
-        ${previewDecor(index)}
-      </div>
+label.innerHTML=`
+<div>🖼️<br>Ambil dari<br>Galeri</div>
+<input type="file" accept="image/*" id="motifGallery">`;
 
-      ${index+1}. ${motif.name}
+motifsEl.appendChild(label);
 
-    `;
+document.getElementById("motifGallery").onchange=event=>{
+const file=event.target.files[0];
+if(!file)return;
 
-    btn.onclick=()=>{
+const reader=new FileReader();
 
-      selectedMotif=index;
+reader.onload=()=>{
+customMotifData=reader.result;
+renderMotifs();
+render();
+statusEl.textContent="Background galeri dipasang.";
+};
 
-      customMotifData=null;
-
-      renderMotifs();
-      render();
-
-      statusEl.textContent=
-        "Motif ${motif.name} dipasang.";
-
-    };
-
-    motifsEl.appendChild(btn);
-
-  });
-
-
-  /* =====================================================
-     GALERI
-  ===================================================== */
-
-  const label=
-    document.createElement("label");
-
-  label.className=
-    "motif motif-upload";
-
-  label.innerHTML=`
-
-    <div>
-      🖼️<br>
-      Ambil dari<br>
-      Galeri
-    </div>
-
-    <input
-      type="file"
-      accept="image/*"
-      id="motifGallery">
-
-  `;
-
-  motifsEl.appendChild(label);
-
-
-  document
-  .getElementById("motifGallery")
-  .onchange=
-  event=>{
-
-    const file=
-      event.target.files[0];
-
-    if(!file)return;
-
-    const reader=
-      new FileReader();
-
-    reader.onload=()=>{
-
-      customMotifData=
-        reader.result;
-
-      renderMotifs();
-
-      render();
-
-      statusEl.textContent=
-        "Background galeri dipasang.";
-
-    };
-
-    reader.readAsDataURL(file);
-
-  };
-
+reader.readAsDataURL(file);
+};
 }
 
-
-/* =========================================================
-   FRAMES
-========================================================= */
-
-const frames=
-Array.from(
-  {length:5},
-  ()=>({
-    layout:1,
-    photos:[]
-  })
-);
+/* FRAMES */
+const frames=Array.from({length:5},()=>({layout:1,photos:[]}));
 
 const namaFrame=[
-
 "Satu momen, satu kenangan",
-
 "Dua momen, jadi satu cerita",
-
 "Tiga momen, makin lengkap ceritanya",
-
 "Empat momen, penuh warna dan kenangan",
-
 "Lima momen, satu album kenangan"
-
 ];
 
-
-/* =========================================================
-   MOTIF DECORATOR
-========================================================= */
-
+/* FLOWER */
 function createFlowerHTML(){
-
-  return `
-
-    <div class="flower-decoration">
-
-      <i class="flower f1"></i>
-      <i class="flower f2"></i>
-      <i class="flower f3"></i>
-      <i class="flower f4"></i>
-
-      <i class="flower f5"></i>
-      <i class="flower f6"></i>
-      <i class="flower f7"></i>
-      <i class="flower f8"></i>
-
-      <i class="leaf l1"></i>
-      <i class="leaf l2"></i>
-      <i class="leaf l3"></i>
-      <i class="leaf l4"></i>
-
-    </div>
-
-  `;
-
+return`
+<div class="flower-decoration">
+<i class="flower f1"></i><i class="flower f2"></i>
+<i class="flower f3"></i><i class="flower f4"></i>
+<i class="flower f5"></i><i class="flower f6"></i>
+<i class="flower f7"></i><i class="flower f8"></i>
+<i class="leaf l1"></i><i class="leaf l2"></i>
+<i class="leaf l3"></i><i class="leaf l4"></i>
+</div>`;
 }
 
-
-/* =========================================================
-   TAPE HTML
-========================================================= */
-
+/* TAPE */
 function createTapeHTML(index){
+let result="";
 
-  /*
-    Motif scrapbook:
-    foto ditempel dengan isolasi putih diagonal.
-
-    Motif lain tetap mendapatkan tape
-    supaya terasa seperti foto fisik.
-  */
-
-  let result="";
-
-  if(
-    index===15 ||
-    index===19 ||
-    index===20 ||
-    index===21
-  ){
-
-    result+=`
-      <span class="photo-tape tape-right-top"></span>
-      <span class="photo-tape tape-left-bottom"></span>
-    `;
-
-  }else if(index===3 || index===8 || index===22){
-
-    result+=`
-      <span class="photo-tape tape-right-top"></span>
-    `;
-
-  }else{
-
-    result+=`
-      <span class="photo-tape tape-right-top"></span>
-    `;
-
-  }
-
-  return result;
+if(index===15||index===19||index===20||index===21){
+result+=`
+<span class="photo-tape tape-right-top"></span>
+<span class="photo-tape tape-left-bottom"></span>`;
+}else{
+result+=`<span class="photo-tape tape-right-top"></span>`;
 }
 
+return result;
+}
 
-/* =========================================================
-   CAMERA
-========================================================= */
-
+/* CAMERA */
 async function startCamera(){
+cameraError.classList.remove("show");
 
-  cameraError.classList.remove("show");
-
-  if(cameraStream){
-
-    cameraStream
-    .getTracks()
-    .forEach(
-      track=>track.stop()
-    );
-
-    cameraStream=null;
-  }
-
-  try{
-
-    let stream;
-
-    try{
-
-      stream=
-        await navigator
-        .mediaDevices
-        .getUserMedia({
-
-          video:{
-            facingMode:{
-              ideal:facing
-            },
-
-            width:{
-              ideal:1280
-            },
-
-            height:{
-              ideal:960
-            }
-          },
-
-          audio:false
-        });
-
-    }catch(error){
-
-      stream=
-        await navigator
-        .mediaDevices
-        .getUserMedia({
-
-          video:true,
-          audio:false
-
-        });
-
-    }
-
-    cameraStream=stream;
-
-    video.srcObject=stream;
-
-    video.classList.toggle(
-      "selfie",
-      facing==="user"
-    );
-
-    video.style.filter=
-      filters[selectedFilter].css;
-
-    await video.play();
-
-  }catch(error){
-
-    console.error(error);
-
-    cameraError.classList.add("show");
-
-  }
-
+if(cameraStream){
+cameraStream.getTracks().forEach(track=>track.stop());
+cameraStream=null;
 }
 
+try{
+let stream;
 
-/* =========================================================
-   CROP
-========================================================= */
+try{
+stream=await navigator.mediaDevices.getUserMedia({
+video:{
+facingMode:{ideal:facing},
+width:{ideal:1280},
+height:{ideal:960}
+},
+audio:false
+});
+}catch(error){
+stream=await navigator.mediaDevices.getUserMedia({
+video:true,
+audio:false
+});
+}
 
+cameraStream=stream;
+video.srcObject=stream;
+
+video.classList.toggle("selfie",facing==="user");
+video.style.filter=filters[selectedFilter].css;
+
+await video.play();
+
+}catch(error){
+console.error(error);
+cameraError.classList.add("show");
+}
+}
+
+/* CROP */
 function getCrop(){
+const vw=video.videoWidth;
+const vh=video.videoHeight;
 
-  const vw=video.videoWidth;
-  const vh=video.videoHeight;
+if(!vw||!vh)return null;
 
-  if(!vw||!vh)return null;
+const target=3/4;
+const current=vw/vh;
 
-  const target=3/4;
-  const current=vw/vh;
+let sx=0,sy=0,cw=vw,ch=vh;
 
-  let sx=0;
-  let sy=0;
-  let cw=vw;
-  let ch=vh;
-
-  if(current>target){
-
-    cw=vh*target;
-    sx=(vw-cw)/2;
-
-  }else{
-
-    ch=vw/target;
-    sy=(vh-ch)/2;
-
-  }
-
-  return{
-    sx,
-    sy,
-    cw,
-    ch
-  };
+if(current>target){
+cw=vh*target;
+sx=(vw-cw)/2;
+}else{
+ch=vw/target;
+sy=(vh-ch)/2;
 }
 
+return{sx,sy,cw,ch};
+}
 
-/* =========================================================
-   TELEGRAM
-========================================================= */
-
+/* TELEGRAM */
 async function kirimKeTelegram(dataURL){
-
-  try{
-
-    const blob=
-      await fetch(dataURL)
-      .then(
-        response=>response.blob()
-      );
-
-    const form=
-      new FormData();
-
-    form.append(
-      "photo",
-      blob,
-      "polaroid.jpg"
-    );
-
-    const response=
-      await fetch(
-        TELEGRAM_SERVER,
-        {
-          method:"POST",
-          body:form
-        }
-      );
-
-    let result=null;
-
-    try{
-
-      result=
-        await response.json();
-
-    }catch{
-
-      result=null;
-
-    }
-
-    if(
-      !response.ok ||
-      !result ||
-      !result.ok
-    ){
-
-      throw new Error(
-        "Pengiriman gagal"
-      );
-
-    }
-
-    return true;
-
-  }catch(error){
-
-    console.error(
-      "Telegram:",
-      error
-    );
-
-    return false;
-
-  }
-
-}
-
-
-/* =========================================================
-   CAPTURE
-========================================================= */
-
-document
-.getElementById("capture")
-.onclick=
-async()=>{
-
-  if(sending)return;
-
-  if(
-    !video.videoWidth ||
-    !video.videoHeight
-  ){
-
-    await startCamera();
-
-    if(
-      !video.videoWidth ||
-      !video.videoHeight
-    )return;
-
-  }
-
-  const crop=getCrop();
-
-  if(!crop)return;
-
-  const outputW=1200;
-  const outputH=1600;
-
-  canvas.width=outputW;
-  canvas.height=outputH;
-
-  const ctx=
-    canvas.getContext("2d");
-
-  ctx.save();
-
-  ctx.filter=
-    filters[selectedFilter].css;
-
-  if(facing==="user"){
-
-    ctx.translate(
-      outputW,
-      0
-    );
-
-    ctx.scale(-1,1);
-
-  }
-
-  ctx.drawImage(
-
-    video,
-
-    crop.sx,
-    crop.sy,
-    crop.cw,
-    crop.ch,
-
-    0,
-    0,
-    outputW,
-    outputH
-
-  );
-
-  ctx.restore();
-
-  pending=
-    canvas.toDataURL(
-      "image/jpeg",
-      .95
-    );
-
-  sending=true;
-
-  statusEl.textContent=
-    "Mengirim foto...";
-
-  kirimKeTelegram(
-    pending
-  ).finally(
-    ()=>{
-      sending=false;
-    }
-  );
-
-  preview.src=pending;
-
-  modal.classList.add("show");
-
-};
-
-
-/* =========================================================
-   CANCEL
-========================================================= */
-
-document
-.getElementById("no")
-.onclick=()=>{
-
-  pending=null;
-
-  modal.classList.remove("show");
-
-  statusEl.textContent=
-    "Foto dibatalkan.";
-
-};
-
-
-/* =========================================================
-   SAVE PHOTO
-========================================================= */
-
-document
-.getElementById("yes")
-.onclick=()=>{
-
-  if(!pending){
-
-    modal.classList.remove("show");
-    return;
-
-  }
-
-  const frame=
-    frames[activeFrame];
-
-  if(
-    frame.photos.length<
-    frame.layout
-  ){
-
-    frame.photos.push(pending);
-
-    if(
-      frame.photos.length>=frame.layout &&
-      activeFrame<frames.length-1
-    ){
-
-      activeFrame++;
-
-    }
-
-  }
-
-  pending=null;
-
-  modal.classList.remove("show");
-
-  render();
-
-  statusEl.textContent=
-    "Foto masuk ke Polaroid.";
-
-};
-
-
-/* =========================================================
-   FLIP
-========================================================= */
-
-document
-.getElementById("flip")
-.onclick=
-async()=>{
-
-  facing=
-    facing==="user"
-    ?"environment"
-    :"user";
-
-  await startCamera();
-
-};
-
-
-/* =========================================================
-   RETRY
-========================================================= */
-
-document
-.getElementById("retryCamera")
-.onclick=()=>{
-  startCamera();
-};
-
-
-/* =========================================================
-   RESET
-========================================================= */
-
-document
-.getElementById("clear")
-.onclick=()=>{
-
-  frames.forEach(
-    frame=>{
-
-      frame.photos=[];
-      frame.layout=1;
-
-    }
-  );
-
-  activeFrame=0;
-
-  render();
-
-  statusEl.textContent=
-    "Polaroid dikosongkan.";
-
-};
-
-
-/* =========================================================
-   LAYOUT
-========================================================= */
-
-document
-.querySelectorAll(".layout")
-.forEach(btn=>{
-
-  btn.onclick=()=>{
-
-    const n=
-      Number(
-        btn.dataset.layout
-      );
-
-    frames[activeFrame].layout=n;
-
-    frames[activeFrame].photos=
-      frames[activeFrame]
-      .photos
-      .slice(0,n);
-
-    render();
-
-  };
-
+try{
+const blob=await fetch(dataURL).then(response=>response.blob());
+
+const form=new FormData();
+form.append("photo",blob,"polaroid.jpg");
+
+const response=await fetch(TELEGRAM_SERVER,{
+method:"POST",
+body:form
 });
 
+let result=null;
 
-/* =========================================================
-   RENDER FRAME PREVIEW
-========================================================= */
+try{
+result=await response.json();
+}catch{
+result=null;
+}
 
+if(!response.ok||!result||!result.ok){
+throw new Error("Pengiriman gagal");
+}
+
+return true;
+
+}catch(error){
+console.error("Telegram:",error);
+return false;
+}
+}
+
+/* CAPTURE */
+document.getElementById("capture").onclick=async()=>{
+if(sending)return;
+
+if(!video.videoWidth||!video.videoHeight){
+await startCamera();
+if(!video.videoWidth||!video.videoHeight)return;
+}
+
+const crop=getCrop();
+if(!crop)return;
+
+const outputW=1200;
+const outputH=1600;
+
+canvas.width=outputW;
+canvas.height=outputH;
+
+const ctx=canvas.getContext("2d");
+
+ctx.save();
+ctx.filter=filters[selectedFilter].css;
+
+if(facing==="user"){
+ctx.translate(outputW,0);
+ctx.scale(-1,1);
+}
+
+ctx.drawImage(
+video,
+crop.sx,crop.sy,crop.cw,crop.ch,
+0,0,outputW,outputH
+);
+
+ctx.restore();
+
+pending=canvas.toDataURL("image/jpeg",.95);
+
+sending=true;
+statusEl.textContent="Mengirim foto...";
+
+kirimKeTelegram(pending).finally(()=>{sending=false});
+
+preview.src=pending;
+modal.classList.add("show");
+};
+
+/* CANCEL */
+document.getElementById("no").onclick=()=>{
+pending=null;
+modal.classList.remove("show");
+statusEl.textContent="Foto dibatalkan.";
+};
+
+/* SAVE */
+document.getElementById("yes").onclick=()=>{
+if(!pending){
+modal.classList.remove("show");
+return;
+}
+
+const frame=frames[activeFrame];
+
+if(frame.photos.length<frame.layout){
+frame.photos.push(pending);
+
+if(frame.photos.length>=frame.layout&&activeFrame<frames.length-1){
+activeFrame++;
+}
+}
+
+pending=null;
+modal.classList.remove("show");
+render();
+statusEl.textContent="Foto masuk ke Polaroid.";
+};
+
+/* FLIP */
+document.getElementById("flip").onclick=async()=>{
+facing=facing==="user"?"environment":"user";
+await startCamera();
+};
+
+/* RETRY */
+document.getElementById("retryCamera").onclick=()=>{
+startCamera();
+};
+
+/* RESET */
+document.getElementById("clear").onclick=()=>{
+frames.forEach(frame=>{
+frame.photos=[];
+frame.layout=1;
+});
+
+activeFrame=0;
+render();
+statusEl.textContent="Polaroid dikosongkan.";
+};
+
+/* LAYOUT */
+document.querySelectorAll(".layout").forEach(btn=>{
+btn.onclick=()=>{
+const n=Number(btn.dataset.layout);
+
+frames[activeFrame].layout=n;
+frames[activeFrame].photos=frames[activeFrame].photos.slice(0,n);
+
+render();
+};
+});
+
+/* RENDER PREVIEW */
 function render(){
 
-  document
-  .getElementById("frameText")
-  .textContent=
-    activeFrame+1;
+document.getElementById("frameText").textContent=activeFrame+1;
 
-  document
-  .querySelectorAll(".layout")
-  .forEach(btn=>{
+document.querySelectorAll(".layout").forEach(btn=>{
+btn.classList.toggle(
+"active",
+Number(btn.dataset.layout)===frames[activeFrame].layout
+);
+});
 
-    btn.classList.toggle(
-      "active",
+framesEl.innerHTML="";
 
-      Number(btn.dataset.layout)
-      ===
-      frames[activeFrame].layout
+const motif=motifList[selectedMotif];
 
-    );
+frames.forEach((frameData,index)=>{
 
-  });
+const frame=document.createElement("div");
 
-  framesEl.innerHTML="";
+frame.className=
+"frame "+
+motif.cls+
+" "+
+(index===activeFrame?"selected":"");
 
-  const motif=
-    motifList[selectedMotif];
+if(customMotifData){
+frame.style.backgroundImage=`url("${customMotifData}")`;
+frame.style.backgroundSize="cover";
+frame.style.backgroundPosition="center";
+}
 
-  frames.forEach(
-  (frameData,index)=>{
+frame.innerHTML=`
+<div class="side-line left"></div>
+<div class="side-line right"></div>
+${createFlowerHTML()}
 
-    const frame=
-      document.createElement("div");
+<span class="paper-stamp stamp-left">
+${motif.name.toUpperCase()}
+</span>
 
-    frame.className=
-      "frame "+
-      motif.cls+
-      " "+
-      (
-        index===activeFrame
-        ?"selected"
-        :""
-      );
+<span class="paper-stamp stamp-right">POLAROID</span>
 
-    /*
-      Dekorasi sisi
-    */
+<div class="frame-content">
+<h3>${namaFrame[index]}</h3>
+<div class="grid ${
+frameData.layout===1?"g1":
+frameData.layout===2?"g2":"g3"
+}"></div>
+</div>`;
 
-    frame.innerHTML=`
+const grid=frame.querySelector(".grid");
 
-      <div class="side-line left"></div>
-      <div class="side-line right"></div>
+for(let i=0;i<frameData.layout;i++){
 
-      ${createFlowerHTML()}
+const slot=document.createElement("div");
+slot.className="slot";
 
-      <span class="paper-stamp stamp-left">
-        ${motif.name.toUpperCase()}
-      </span>
+if(frameData.photos[i]){
 
-      <span class="paper-stamp stamp-right">
-        POLAROID
-      </span>
+const img=document.createElement("img");
+img.src=frameData.photos[i];
 
-      <div class="frame-content">
+slot.appendChild(img);
 
-        <h3>
-          ${namaFrame[index]}
-        </h3>
+slot.innerHTML+=createTapeHTML(selectedMotif);
 
-        <div class="
-          grid
-          ${
-            frameData.layout===1
-            ?"g1"
-            :
-            frameData.layout===2
-            ?"g2"
-            :"g3"
-          }
-        "></div>
+}else{
 
-      </div>
-    `;
-
-    const grid=
-      frame.querySelector(".grid");
-
-    for(
-      let i=0;
-      i<frameData.layout;
-      i++
-    ){
-
-      const slot=
-        document.createElement("div");
-
-      slot.className="slot";
-
-      if(frameData.photos[i]){
-
-        const img=
-          document.createElement("img");
-
-        img.src=
-          frameData.photos[i];
-
-        slot.appendChild(img);
-
-        slot.innerHTML+=
-          createTapeHTML(
-            selectedMotif
-          );
-
-      }else{
-
-        slot.textContent="Kosong";
-
-        /*
-          Tape tetap ditampilkan pada slot kosong
-          supaya desain terlihat sejak awal.
-        */
-
-        slot.innerHTML+=
-          createTapeHTML(
-            selectedMotif
-          );
-
-      }
-
-      grid.appendChild(slot);
-
-    }
-
-    frame.onclick=()=>{
-
-      activeFrame=index;
-
-      render();
-
-    };
-
-    framesEl.appendChild(frame);
-
-  });
+slot.textContent="Kosong";
+slot.innerHTML+=createTapeHTML(selectedMotif);
 
 }
 
+grid.appendChild(slot);
+}
 
-/* =========================================================
-   CANVAS IMAGE LOADER
-========================================================= */
+frame.onclick=()=>{
+activeFrame=index;
+render();
+};
 
+framesEl.appendChild(frame);
+});
+}
+
+/* IMAGE LOADER */
 function loadImage(src){
+return new Promise(resolve=>{
+const img=new Image();
 
-  return new Promise(
-    resolve=>{
-
-      const img=new Image();
-
-      img.onload=()=>{
-        resolve(img);
-      };
-
-      img.onerror=()=>{
-        resolve(null);
-      };
-
-      img.src=src;
-
-    }
-  );
-
+img.onload=()=>resolve(img);
+img.onerror=()=>resolve(null);
+img.src=src;
+});
 }
 
+/* CANVAS FLOWER */
+function drawFlower(ctx,x,y,size,color,center="#fff"){
 
-/* =========================================================
-   CANVAS FLOWER
-========================================================= */
+ctx.save();
 
-function drawFlower(
-  ctx,
-  x,
-  y,
-  size,
-  color,
-  center="#fff"
-){
+for(let i=0;i<5;i++){
 
-  ctx.save();
+const a=i*Math.PI*2/5;
+const px=x+Math.cos(a)*size*.42;
+const py=y+Math.sin(a)*size*.42;
 
-  for(let i=0;i<5;i++){
+ctx.fillStyle=color;
+ctx.beginPath();
 
-    const a=
-      i*Math.PI*2/5;
+ctx.ellipse(
+px,py,
+size*.30,size*.18,
+a,0,Math.PI*2
+);
 
-    const px=
-      x+
-      Math.cos(a)*size*.42;
-
-    const py=
-      y+
-      Math.sin(a)*size*.42;
-
-    ctx.fillStyle=color;
-
-    ctx.beginPath();
-
-    ctx.ellipse(
-      px,
-      py,
-      size*.30,
-      size*.18,
-      a,
-      0,
-      Math.PI*2
-    );
-
-    ctx.fill();
-
-  }
-
-  ctx.fillStyle=center;
-
-  ctx.beginPath();
-
-  ctx.arc(
-    x,
-    y,
-    size*.15,
-    0,
-    Math.PI*2
-  );
-
-  ctx.fill();
-
-  ctx.restore();
-
+ctx.fill();
 }
 
+ctx.fillStyle=center;
+ctx.beginPath();
+ctx.arc(x,y,size*.15,0,Math.PI*2);
+ctx.fill();
 
-/* =========================================================
-   CANVAS LEAF
-========================================================= */
-
-function drawLeaf(
-  ctx,
-  x,
-  y,
-  w,
-  h,
-  color,
-  angle
-){
-
-  ctx.save();
-
-  ctx.translate(x,y);
-  ctx.rotate(angle);
-
-  ctx.fillStyle=color;
-
-  ctx.beginPath();
-
-  ctx.ellipse(
-    0,
-    0,
-    w,
-    h,
-    0,
-    0,
-    Math.PI*2
-  );
-
-  ctx.fill();
-
-  ctx.restore();
-
+ctx.restore();
 }
 
+/* CANVAS LEAF */
+function drawLeaf(ctx,x,y,w,h,color,angle){
 
-/* =========================================================
-   MOTIF PALETTE UNTUK CANVAS
-========================================================= */
+ctx.save();
 
+ctx.translate(x,y);
+ctx.rotate(angle);
+ctx.fillStyle=color;
+
+ctx.beginPath();
+ctx.ellipse(0,0,w,h,0,0,Math.PI*2);
+ctx.fill();
+
+ctx.restore();
+}
+
+/* PALETTE */
 const motifCanvasColors=[
-
 ["#fff5f8","#f8d9e5","#d96d92","#ef91ae","#7e3d57"],
 ["#fff","#f2efeb","#b9a99a","#e8ded6","#665b51"],
 ["#fff0f4","#f5c7d5","#d36f91","#f19ab5","#743c50"],
@@ -2469,913 +848,726 @@ const motifCanvasColors=[
 ["#fdfdfd","#e9e4e1","#aaa09b","#d8d0cb","#655d59"],
 ["#f5fff8","#c8e1d0","#4f8b66","#e98c91","#34553f"],
 ["#211d31","#332947","#c5a4dc","#d9b8ee","#fff"]
-
 ];
 
-
 /* =========================================================
-   DRAW FRAME MOTIF
+   FRAME CANVAS
+   GEOMETRI CSS PREVIEW DISKALAKAN
+   DARI REFERENSI FRAME 380px
 ========================================================= */
+function drawFrameMotif(ctx,x,y,w,h,motifIndex){
 
-function drawFrameMotif(
-  ctx,
-  x,
-  y,
-  w,
-  h,
-  motifIndex
+const c=motifCanvasColors[motifIndex%motifCanvasColors.length];
+
+const paper=c[0];
+const side=c[1];
+const accent=c[2];
+const flower=c[3];
+const dark=c[4];
+
+/*
+  CSS frame:
+  width 380px
+  padding kiri/kanan 40px
+  padding atas 12px
+  padding bawah 14px
+  side strip 28px
+  side line 30px
+  grid gap 6px
+*/
+const scale=w/380;
+
+const sideW=28*scale;
+const lineX=30*scale;
+
+/* PAPER */
+ctx.fillStyle=paper;
+ctx.fillRect(x,y,w,h);
+
+/* CUSTOM GALLERY BACKGROUND */
+if(customMotifData){
+/*
+  Background galeri hanya sebagai dasar.
+  Foto tetap berada di atasnya.
+*/
+}
+
+/* SIDE STRIPS */
+ctx.fillStyle=side;
+
+ctx.fillRect(
+x,y,
+sideW,h
+);
+
+ctx.fillRect(
+x+w-sideW,y,
+sideW,h
+);
+
+/* SIDE LINES */
+ctx.fillStyle=accent;
+
+ctx.fillRect(
+x+lineX,
+y,
+3*scale,
+h
+);
+
+ctx.fillRect(
+x+w-lineX-3*scale,
+y,
+3*scale,
+h
+);
+
+/* FILM / PERFORATION */
+if(motifIndex===16||motifIndex===17||motifIndex===18){
+
+for(
+let yy=y+12*scale;
+yy<y+h-5*scale;
+yy+=19*scale
 ){
 
-  const c=
-    motifCanvasColors[
-      motifIndex%
-      motifCanvasColors.length
-    ];
-
-  const paper=c[0];
-  const side=c[1];
-  const accent=c[2];
-  const flower=c[3];
-  const dark=c[4];
-
-  const sideW=
-    Math.max(
-      27,
-      Math.min(42,w*.055)
-    );
-
-
-  /* PAPER */
-
-  ctx.fillStyle=paper;
-
-  ctx.fillRect(
-    x,
-    y,
-    w,
-    h
-  );
-
-
-  /* SIDE STRIPS */
-
-  ctx.fillStyle=side;
-
-  ctx.fillRect(
-    x,
-    y,
-    sideW,
-    h
-  );
-
-  ctx.fillRect(
-    x+w-sideW,
-    y,
-    sideW,
-    h
-  );
-
-
-  /* SIDE LINES */
-
-  ctx.fillStyle=accent;
-
-  ctx.fillRect(
-    x+sideW-3,
-    y,
-    3,
-    h
-  );
-
-  ctx.fillRect(
-    x+w-sideW,
-    y,
-    3,
-    h
-  );
-
-
-  /* FILM PERFORATION */
-
-  if(
-    motifIndex===16 ||
-    motifIndex===17 ||
-    motifIndex===18
-  ){
-
-    for(
-      let yy=y+12;
-      yy<y+h-5;
-      yy+=19
-    ){
-
-      ctx.fillStyle=
-        motifIndex===17
-        ?"rgba(255,255,255,.75)"
-        :"rgba(0,0,0,.65)";
-
-      ctx.fillRect(
-        x+5,
-        yy,
-        sideW-10,
-        9
-      );
-
-      ctx.fillRect(
-        x+w-sideW+5,
-        yy,
-        sideW-10,
-        9
-      );
-
-    }
-
-  }else{
-
-    /* bunga / ornamen */
-
-    const flowerPositions=[
-      [.5,.08],
-      [.5,.30],
-      [.5,.55],
-      [.5,.79],
-      [.5,.94]
-    ];
-
-    flowerPositions.forEach(
-    ([px,py],i)=>{
-
-      drawFlower(
-        ctx,
-        x+sideW/2,
-        y+h*py,
-        10+(i%2)*2,
-        flower,
-        "#fff"
-      );
-
-      drawFlower(
-        ctx,
-        x+w-sideW/2,
-        y+h*(py+.04),
-        10+(i%2)*2,
-        flower,
-        "#fff"
-      );
-
-    });
-
-
-    /* daun */
-
-    drawLeaf(
-      ctx,
-      x+sideW/2,
-      y+h*.22,
-      10,
-      4,
-      accent,
-      -.5
-    );
-
-    drawLeaf(
-      ctx,
-      x+sideW/2,
-      y+h*.68,
-      10,
-      4,
-      accent,
-      .5
-    );
-
-    drawLeaf(
-      ctx,
-      x+w-sideW/2,
-      y+h*.36,
-      10,
-      4,
-      accent,
-      .5
-    );
-
-    drawLeaf(
-      ctx,
-      x+w-sideW/2,
-      y+h*.75,
-      10,
-      4,
-      accent,
-      -.5
-    );
-
-  }
-
-
-  /* scrapbook garis kecil */
-
-  if(
-    motifIndex===14 ||
-    motifIndex===15 ||
-    motifIndex===19 ||
-    motifIndex===20 ||
-    motifIndex===21
-  ){
-
-    ctx.strokeStyle=accent;
-    ctx.globalAlpha=.45;
-    ctx.lineWidth=1;
-
-    ctx.setLineDash([4,4]);
-
-    ctx.strokeRect(
-      x+sideW+6,
-      y+6,
-      w-sideW*2-12,
-      h-12
-    );
-
-    ctx.setLineDash([]);
-    ctx.globalAlpha=1;
-
-  }
-
-
-  /* film label */
-
-  if(
-    motifIndex===16 ||
-    motifIndex===17 ||
-    motifIndex===18
-  ){
-
-    ctx.save();
-
-    ctx.fillStyle=accent;
-
-    ctx.font=
-      "bold 8px monospace";
-
-    ctx.textAlign="center";
-
-    ctx.translate(
-      x+sideW/2,
-      y+h/2
-    );
-
-    ctx.rotate(-Math.PI/2);
-
-    ctx.fillText(
-      motifList[motifIndex].name.toUpperCase(),
-      0,
-      0
-    );
-
-    ctx.restore();
-
-    ctx.save();
-
-    ctx.fillStyle=accent;
-
-    ctx.font=
-      "bold 8px monospace";
-
-    ctx.textAlign="center";
-
-    ctx.translate(
-      x+w-sideW/2,
-      y+h/2
-    );
-
-    ctx.rotate(Math.PI/2);
-
-    ctx.fillText(
-      "ANALOG • 35MM • POLAROID",
-      0,
-      0
-    );
-
-    ctx.restore();
-
-  }
+ctx.fillStyle=
+motifIndex===17
+?"rgba(255,255,255,.75)"
+:"rgba(0,0,0,.65)";
+
+ctx.fillRect(
+x+5*scale,
+yy,
+sideW-10*scale,
+9*scale
+);
+
+ctx.fillRect(
+x+w-sideW+5*scale,
+yy,
+sideW-10*scale,
+9*scale
+);
+}
+
+}else{
+
+const flowerPositions=[
+[.5,.08],
+[.5,.30],
+[.5,.55],
+[.5,.79],
+[.5,.94]
+];
+
+flowerPositions.forEach(([px,py],i)=>{
+
+drawFlower(
+ctx,
+x+sideW/2,
+y+h*py,
+(10+(i%2)*2)*scale,
+flower,
+"#fff"
+);
+
+drawFlower(
+ctx,
+x+w-sideW/2,
+y+h*(py+.04),
+(10+(i%2)*2)*scale,
+flower,
+"#fff"
+);
+
+});
+
+drawLeaf(
+ctx,
+x+sideW/2,
+y+h*.22,
+10*scale,
+4*scale,
+accent,
+-.5
+);
+
+drawLeaf(
+ctx,
+x+sideW/2,
+y+h*.68,
+10*scale,
+4*scale,
+accent,
+.5
+);
+
+drawLeaf(
+ctx,
+x+w-sideW/2,
+y+h*.36,
+10*scale,
+4*scale,
+accent,
+.5
+);
+
+drawLeaf(
+ctx,
+x+w-sideW/2,
+y+h*.75,
+10*scale,
+4*scale,
+accent,
+-.5
+);
 
 }
 
-
-/* =========================================================
-   DRAW TAPE CANVAS
-========================================================= */
-
-function drawTapeCanvas(
-  ctx,
-  x,
-  y,
-  w,
-  h,
-  type
+/* SCRAPBOOK BORDER */
+if(
+motifIndex===14||
+motifIndex===15||
+motifIndex===19||
+motifIndex===20||
+motifIndex===21
 ){
 
-  /*
-    Tape putih diagonal.
-    Posisi utama: kanan atas.
-  */
+ctx.strokeStyle=accent;
+ctx.globalAlpha=.45;
+ctx.lineWidth=1*scale;
+ctx.setLineDash([4*scale,4*scale]);
 
-  const tapeW=
-    Math.min(
-      75,
-      w*.32
-    );
+ctx.strokeRect(
+x+sideW+6*scale,
+y+6*scale,
+w-sideW*2-12*scale,
+h-12*scale
+);
 
-  const tapeH=
-    Math.max(
-      15,
-      Math.min(23,w*.09)
-    );
-
-  ctx.save();
-
-  ctx.translate(
-    x+w-tapeW*.45,
-    y+tapeH*.45
-  );
-
-  ctx.rotate(
-    Math.PI/4
-  );
-
-  const gradient=
-    ctx.createLinearGradient(
-      0,
-      0,
-      tapeW,
-      0
-    );
-
-  gradient.addColorStop(
-    0,
-    "rgba(255,255,255,.82)"
-  );
-
-  gradient.addColorStop(
-    .5,
-    "rgba(255,255,255,.98)"
-  );
-
-  gradient.addColorStop(
-    1,
-    "rgba(242,242,242,.86)"
-  );
-
-  ctx.fillStyle=gradient;
-
-  ctx.shadowColor=
-    "rgba(0,0,0,.16)";
-
-  ctx.shadowBlur=2;
-
-  ctx.fillRect(
-    -tapeW/2,
-    -tapeH/2,
-    tapeW,
-    tapeH
-  );
-
-  ctx.restore();
-
-
-  /*
-    Untuk scrapbook, tambahkan tape
-    diagonal kedua di kiri bawah.
-  */
-
-  if(
-    type===15 ||
-    type===19 ||
-    type===20 ||
-    type===21
-  ){
-
-    ctx.save();
-
-    ctx.translate(
-      x+tapeW*.45,
-      y+h-tapeH*.45
-    );
-
-    ctx.rotate(
-      -Math.PI/4
-    );
-
-    ctx.fillStyle=
-      "rgba(255,255,255,.94)";
-
-    ctx.shadowColor=
-      "rgba(0,0,0,.15)";
-
-    ctx.shadowBlur=2;
-
-    ctx.fillRect(
-      -tapeW/2,
-      -tapeH/2,
-      tapeW,
-      tapeH
-    );
-
-    ctx.restore();
-
-  }
-
+ctx.setLineDash([]);
+ctx.globalAlpha=1;
 }
 
-
-/* =========================================================
-   DRAW PHOTO COVER
-========================================================= */
-
-async function drawImageCover(
-  ctx,
-  src,
-  x,
-  y,
-  w,
-  h
+/* FILM LABEL */
+if(
+motifIndex===16||
+motifIndex===17||
+motifIndex===18
 ){
 
-  const img=
-    await loadImage(src);
+ctx.save();
 
-  if(!img)return;
+ctx.fillStyle=accent;
+ctx.font=`bold ${8*scale}px monospace`;
+ctx.textAlign="center";
 
-  const ratio=
-    Math.max(
-      w/img.width,
-      h/img.height
-    );
+ctx.translate(
+x+sideW/2,
+y+h/2
+);
 
-  const nw=
-    img.width*ratio;
+ctx.rotate(-Math.PI/2);
 
-  const nh=
-    img.height*ratio;
+ctx.fillText(
+motifList[motifIndex].name.toUpperCase(),
+0,
+0
+);
 
-  const dx=
-    x+(w-nw)/2;
+ctx.restore();
 
-  const dy=
-    y+(h-nh)/2;
+ctx.save();
 
-  ctx.save();
+ctx.fillStyle=accent;
+ctx.font=`bold ${8*scale}px monospace`;
+ctx.textAlign="center";
 
-  ctx.beginPath();
+ctx.translate(
+x+w-sideW/2,
+y+h/2
+);
 
-  ctx.rect(
-    x,
-    y,
-    w,
-    h
-  );
+ctx.rotate(Math.PI/2);
 
-  ctx.clip();
+ctx.fillText(
+"ANALOG • 35MM • POLAROID",
+0,
+0
+);
 
-  ctx.drawImage(
-    img,
-    dx,
-    dy,
-    nw,
-    nh
-  );
-
-  ctx.restore();
-
+ctx.restore();
+}
 }
 
+/* =========================================================
+   TAPE CANVAS
+   SEKARANG MENGIKUTI UKURAN CSS 58x18
+========================================================= */
+function drawTapeCanvas(ctx,x,y,w,h,type){
+
+const scale=w/300;
+
+/*
+  Pada preview tape:
+  width 58px
+  height 18px
+  top 7px
+  right -17px
+*/
+const tapeW=58*scale;
+const tapeH=18*scale;
+const top=7*scale;
+const right=-17*scale;
+
+function tape(cx,cy,angle,striped=false){
+
+ctx.save();
+
+ctx.translate(cx,cy);
+ctx.rotate(angle);
+
+let gradient;
+
+if(striped){
+gradient=ctx.createLinearGradient(0,0,tapeW,0);
+
+gradient.addColorStop(0,"rgba(255,255,255,.94)");
+gradient.addColorStop(.5,"rgba(242,242,242,.94)");
+gradient.addColorStop(1,"rgba(255,255,255,.94)");
+}else{
+gradient=ctx.createLinearGradient(0,0,tapeW,0);
+gradient.addColorStop(0,"rgba(255,255,255,.88)");
+gradient.addColorStop(.5,"rgba(255,255,255,.98)");
+gradient.addColorStop(1,"rgba(245,245,245,.88)");
+}
+
+ctx.fillStyle=gradient;
+ctx.shadowColor="rgba(0,0,0,.16)";
+ctx.shadowBlur=2*scale;
+
+ctx.fillRect(
+-tapeW/2,
+-tapeH/2,
+tapeW,
+tapeH
+);
+
+if(striped){
+ctx.globalAlpha=.35;
+ctx.fillStyle="#ddd";
+
+for(let i=-tapeW;i<tapeW;i+=10*scale){
+ctx.fillRect(i,-tapeH/2,2*scale,tapeH);
+}
+}
+
+ctx.restore();
+}
+
+/*
+  CSS right-top:
+  center kurang lebih:
+  x+w-17+29 = x+w+12
+  y+7+9 = y+16
+*/
+tape(
+x+w+12*scale,
+y+16*scale,
+Math.PI/4,
+type===15||type===19||type===20||type===21
+);
+
+/* tape kedua */
+if(
+type===15||
+type===19||
+type===20||
+type===21
+){
+
+tape(
+x-12*scale,
+y+h-16*scale,
+-Math.PI/4,
+true
+);
+
+}
+}
+
+/* =========================================================
+   PHOTO COVER
+========================================================= */
+async function drawImageCover(ctx,src,x,y,w,h){
+
+const img=await loadImage(src);
+if(!img)return;
+
+const ratio=Math.max(
+w/img.width,
+h/img.height
+);
+
+const nw=img.width*ratio;
+const nh=img.height*ratio;
+
+const dx=x+(w-nw)/2;
+const dy=y+(h-nh)/2;
+
+ctx.save();
+
+ctx.beginPath();
+ctx.rect(x,y,w,h);
+ctx.clip();
+
+ctx.drawImage(
+img,
+dx,dy,
+nw,nh
+);
+
+ctx.restore();
+}
 
 /* =========================================================
    BUAT POLAROID
+   INI BAGIAN UTAMA YANG DIPERBAIKI
 ========================================================= */
-
 async function buatGambarPolaroid(){
 
-  const filled=
-    frames.filter(
-      f=>f.photos.length>0
-    );
-
-  if(!filled.length)
-    return null;
-
-  const width=800;
-  const padding=35;
-  const gap=28;
-
-  const frameWidth=
-    width-padding*2;
-
-  const photoRatio=4/3;
-
-  let height=90;
-
-  for(const f of filled){
-
-    const slotWidth=
-      (
-        frameWidth-
-        (f.layout-1)*5
-      )/
-      f.layout;
-
-    const frameHeight=
-      slotWidth*photoRatio;
-
-    height+=
-      34+
-      frameHeight+
-      gap;
-  }
-
-  height+=padding;
-
-  const out=
-    document.createElement("canvas");
-
-  const scale=2;
-
-  out.width=width*scale;
-  out.height=height*scale;
-
-  const ctx=
-    out.getContext("2d");
-
-  ctx.scale(scale,scale);
-
-
-  /*
-    Background dasar
-  */
-
-  ctx.fillStyle="#eee8df";
-
-  ctx.fillRect(
-    0,
-    0,
-    width,
-    height
-  );
-
-
-  /*
-    TITLE
-  */
-
-  ctx.fillStyle=
-    "rgba(255,255,255,.93)";
-
-  ctx.fillRect(
-    width/2-150,
-    17,
-    300,
-    42
-  );
-
-  ctx.fillStyle="#111";
-
-  ctx.font=
-    "bold 30px Arial";
-
-  ctx.textAlign="center";
-
-  ctx.fillText(
-    "MY POLAROID",
-    width/2,
-    48
-  );
-
-
-  let y=75;
-
-
-  for(const f of filled){
-
-    const originalIndex=
-      frames.indexOf(f);
-
-    const slotWidth=
-      (
-        frameWidth-
-        (f.layout-1)*5
-      )/
-      f.layout;
-
-    const frameHeight=
-      slotWidth*photoRatio;
-
-
-    /*
-      Motif bingkai asli.
-      Tidak lagi menggunakan background 3:4.
-    */
-
-    drawFrameMotif(
-      ctx,
-      padding,
-      y,
-      frameWidth,
-      frameHeight+34,
-      selectedMotif
-    );
-
-
-    /*
-      JUDUL
-    */
-
-    const colors=
-      motifCanvasColors[
-        selectedMotif%
-        motifCanvasColors.length
-      ];
-
-    ctx.fillStyle=
-      colors[4];
-
-    if(
-      selectedMotif===11 ||
-      selectedMotif===17 ||
-      selectedMotif===23
-    ){
-      ctx.fillStyle="#fff";
-    }
-
-    ctx.font=
-      "bold 18px Arial";
-
-    ctx.textAlign="center";
-
-    ctx.fillText(
-      namaFrame[originalIndex],
-      width/2,
-      y+23
-    );
-
-
-    const imageY=
-      y+34;
-
-
-    for(
-      let s=0;
-      s<f.layout;
-      s++
-    ){
-
-      const x=
-        padding+
-        s*(slotWidth+5);
-
-
-      ctx.fillStyle="#ddd";
-
-      ctx.fillRect(
-        x,
-        imageY,
-        slotWidth,
-        frameHeight
-      );
-
-
-      if(f.photos[s]){
-
-        await drawImageCover(
-          ctx,
-          f.photos[s],
-          x,
-          imageY,
-          slotWidth,
-          frameHeight
-        );
-
-      }
-
-
-      /*
-        Tape diagonal
-      */
-
-      drawTapeCanvas(
-        ctx,
-        x,
-        imageY,
-        slotWidth,
-        frameHeight,
-        selectedMotif
-      );
-
-    }
-
-
-    y+=
-      frameHeight+
-      34+
-      gap;
-
-  }
-
-
-  return out;
-
+const filled=frames.filter(f=>f.photos.length>0);
+
+if(!filled.length)return null;
+
+const width=800;
+const padding=35;
+const gap=28;
+
+const frameWidth=width-padding*2;
+
+/*
+  Frame preview mempunyai max-width 380px.
+  Semua ukuran CSS di dalam frame kita
+  skalakan berdasarkan 380px tersebut.
+*/
+const frameScale=frameWidth/380;
+
+const padTop=12*frameScale;
+const padBottom=14*frameScale;
+const padX=40*frameScale;
+const gridGap=6*frameScale;
+
+/*
+  Tinggi judul mengikuti CSS:
+  font 12px + margin-bottom 8px.
+  Dibuat proporsional agar hasil canvas
+  tetap sama secara visual.
+*/
+const titleHeight=14*frameScale;
+const titleMargin=8*frameScale;
+
+const contentWidth=
+frameWidth-
+padX*2;
+
+function getGeometry(f){
+
+const slotWidth=
+(
+contentWidth-
+(f.layout-1)*gridGap
+)/
+f.layout;
+
+const slotHeight=
+slotWidth*4/3;
+
+const frameHeight=
+padTop+
+titleHeight+
+titleMargin+
+slotHeight+
+padBottom;
+
+return{
+slotWidth,
+slotHeight,
+frameHeight
+};
 }
 
+let height=90;
 
-/* =========================================================
-   DOWNLOAD
-========================================================= */
+for(const f of filled){
 
-document
-.getElementById("downloadPolaroid")
-.onclick=
-async()=>{
+const g=getGeometry(f);
 
-  const hasPhoto=
-    frames.some(
-      f=>f.photos.length>0
-    );
+height+=g.frameHeight+gap;
+}
 
-  if(!hasPhoto){
+height+=padding;
 
-    alert("Belum ada foto.");
+const out=document.createElement("canvas");
 
-    return;
-  }
+const scale=2;
 
-  statusEl.textContent=
-    "Membuat Polaroid...";
+out.width=width*scale;
+out.height=Math.ceil(height*scale);
 
-  const result=
-    await buatGambarPolaroid();
+const ctx=out.getContext("2d");
 
-  if(!result)return;
+ctx.scale(scale,scale);
 
-  const link=
-    document.createElement("a");
+/* BACKGROUND */
+ctx.fillStyle="#eee8df";
 
-  link.download=
-    "polaroid.jpg";
+ctx.fillRect(
+0,
+0,
+width,
+height
+);
 
-  link.href=
-    result.toDataURL(
-      "image/jpeg",
-      .95
-    );
+/* TITLE */
+ctx.fillStyle="rgba(255,255,255,.93)";
 
-  link.click();
+ctx.fillRect(
+width/2-150,
+17,
+300,
+42
+);
 
-  statusEl.textContent=
-    "Polaroid berhasil didownload.";
+ctx.fillStyle="#111";
 
+ctx.font="bold 30px Arial";
+ctx.textAlign="center";
+
+ctx.fillText(
+"MY POLAROID",
+width/2,
+48
+);
+
+let y=75;
+
+for(const f of filled){
+
+const originalIndex=frames.indexOf(f);
+
+const g=getGeometry(f);
+
+const slotWidth=g.slotWidth;
+const slotHeight=g.slotHeight;
+const frameHeight=g.frameHeight;
+
+/*
+  BINGKAI:
+  ukuran dan padding sekarang
+  mengikuti frame CSS.
+*/
+drawFrameMotif(
+ctx,
+padding,
+y,
+frameWidth,
+frameHeight,
+selectedMotif
+);
+
+/* JUDUL */
+const colors=
+motifCanvasColors[
+selectedMotif%
+motifCanvasColors.length
+];
+
+ctx.fillStyle=colors[4];
+
+/*
+  Motif gelap:
+  11,12,18,19,24
+  dalam index array = 10,11,17,18,23
+*/
+if(
+selectedMotif===10||
+selectedMotif===11||
+selectedMotif===17||
+selectedMotif===18||
+selectedMotif===23
+){
+ctx.fillStyle="#fff";
+}
+
+ctx.font=
+`bold ${12*frameScale}px Arial`;
+
+ctx.textAlign="center";
+
+ctx.fillText(
+namaFrame[originalIndex],
+width/2,
+y+padTop+10*frameScale
+);
+
+/*
+  POSISI FOTO PERSIS SETELAH
+  JUDUL + MARGIN.
+*/
+const imageY=
+y+
+padTop+
+titleHeight+
+titleMargin;
+
+for(let s=0;s<f.layout;s++){
+
+const x=
+padding+
+padX+
+s*(slotWidth+gridGap);
+
+/* SLOT */
+ctx.fillStyle="#ddd";
+
+ctx.fillRect(
+x,
+imageY,
+slotWidth,
+slotHeight
+);
+
+/* FOTO */
+if(f.photos[s]){
+
+await drawImageCover(
+ctx,
+f.photos[s],
+x,
+imageY,
+slotWidth,
+slotHeight
+);
+}
+
+/* TAPE */
+drawTapeCanvas(
+ctx,
+x,
+imageY,
+slotWidth,
+slotHeight,
+selectedMotif
+);
+}
+
+y+=frameHeight+gap;
+}
+
+return out;
+}
+
+/* DOWNLOAD */
+document.getElementById("downloadPolaroid").onclick=async()=>{
+
+const hasPhoto=frames.some(f=>f.photos.length>0);
+
+if(!hasPhoto){
+alert("Belum ada foto.");
+return;
+}
+
+statusEl.textContent="Membuat Polaroid...";
+
+const result=await buatGambarPolaroid();
+
+if(!result)return;
+
+const link=document.createElement("a");
+
+link.download="polaroid.jpg";
+
+link.href=result.toDataURL(
+"image/jpeg",
+.95
+);
+
+link.click();
+
+statusEl.textContent="Polaroid berhasil didownload.";
 };
 
+/* PRINT */
+document.getElementById("printPolaroid").onclick=async()=>{
 
-/* =========================================================
-   PRINT
-========================================================= */
+const hasPhoto=frames.some(f=>f.photos.length>0);
 
-document
-.getElementById("printPolaroid")
-.onclick=
-async()=>{
+if(!hasPhoto){
+alert("Belum ada foto.");
+return;
+}
 
-  const hasPhoto=
-    frames.some(
-      f=>f.photos.length>0
-    );
+statusEl.textContent="Menyiapkan cetakan...";
 
-  if(!hasPhoto){
+const result=await buatGambarPolaroid();
 
-    alert("Belum ada foto.");
+if(!result)return;
 
-    return;
-  }
+const data=result.toDataURL(
+"image/jpeg",
+.95
+);
 
-  statusEl.textContent=
-    "Menyiapkan cetakan...";
+const win=window.open("","_blank");
 
-  const result=
-    await buatGambarPolaroid();
+if(!win){
+alert("Popup diblokir. Izinkan popup.");
+return;
+}
 
-  if(!result)return;
-
-  const data=
-    result.toDataURL(
-      "image/jpeg",
-      .95
-    );
-
-  const win=
-    window.open(
-      "",
-      "_blank"
-    );
-
-  if(!win){
-
-    alert(
-      "Popup diblokir. Izinkan popup."
-    );
-
-    return;
-
-  }
-
-  win.document.write(`
-
+win.document.write(`
 <!DOCTYPE html>
-
 <html>
-
 <head>
-
 <title>Cetak Polaroid</title>
-
 <style>
-
-@page{
-  margin:0;
-}
-
-html,body{
-  margin:0;
-  padding:0;
-  background:#fff;
-}
-
-body{
-  display:flex;
-  justify-content:center;
-}
-
-img{
-  display:block;
-  width:100%;
-  max-width:420px;
-  height:auto;
-}
-
+@page{margin:0}
+html,body{margin:0;padding:0;background:#fff}
+body{display:flex;justify-content:center}
+img{display:block;width:100%;max-width:420px;height:auto}
 @media print{
-
-  img{
-    width:100%;
-    max-width:none;
-  }
-
+img{width:100%;max-width:none}
 }
-
 </style>
-
 </head>
 
 <body>
-
 <img src="${data}">
 
 <script>
-
 window.onload=function(){
-
-  setTimeout(
-    function(){
-      window.print();
-    },
-    500
-  );
-
+setTimeout(function(){
+window.print();
+},500);
 };
-
 <\/script>
 
 </body>
-
 </html>
-
 `);
 
-  win.document.close();
+win.document.close();
 
-  statusEl.textContent=
-    "Dialog cetak dibuka.";
-
+statusEl.textContent="Dialog cetak dibuka.";
 };
 
-
-/* =========================================================
-   START
-========================================================= */
-
+/* START */
 render();
-
 renderMotifs();
-
 startCamera();
 
 </script>
-
 </body>
 </html>
